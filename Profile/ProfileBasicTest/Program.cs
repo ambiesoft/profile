@@ -13,9 +13,12 @@ namespace ProfileCheck
             string inipath = Application.ExecutablePath + ".ini";
             int i;
 
+            Profile.WriteInt("aaa", "aaa", 12345, inipath);
             Profile.GetInt("aaa", "aaa", 0, out i, inipath);
-            Profile.WriteBinary("aaa", "bbb", new byte[] { 0xaa, 0xbb }, inipath);
 
+            Profile.WriteBinary("aaa", "bbb", new byte[] { 0xaa, 0xbb }, inipath);
+            byte[] mybyte;
+            Profile.GetBinary("aaa","bbb", out mybyte,inipath);
 
             
             

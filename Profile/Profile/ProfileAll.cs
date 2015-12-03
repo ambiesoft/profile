@@ -16,7 +16,7 @@ namespace Ambiesoft
         static public HashIni ReadAll(String inipath, bool throwexception)
         {
             Mutex mutex = null;
-            HashIni hi = HashIni.CreateEmptyInstance();
+            HashIni hi = HashIni.CreateEmptyInstanceForSpecialUse();
             Hashtable al = hi.Hash;
             try
             {

@@ -19,7 +19,7 @@ namespace Ambiesoft
             get { return hash_; }
         }
 
-        public static HashIni CreateEmptyInstance()
+        public static HashIni CreateEmptyInstanceForSpecialUse()
         {
             return new HashIni();
         }
