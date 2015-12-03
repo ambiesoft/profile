@@ -13,6 +13,7 @@ Ini File will be loaded and saved with UTF8.
 ## Benefit
 - Easy to use
 - Backward and forward compatibility
+- Easy to edit
  
 
 ## Available type for loading and saving
