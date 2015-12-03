@@ -22,6 +22,7 @@ Ini File will be loaded and saved with UTF8.
 - string array
 - bool
  
-
+## License
+Public Domain
 
 
