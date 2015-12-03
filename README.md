@@ -1,2 +1,2 @@
 # profile
-.Net Ini file reader/writer
+.Net reader/writer for .ini
