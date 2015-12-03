@@ -11,6 +11,53 @@ void errorhappen111()
 	Console::WriteLine("EEEEEEEEEEEEEEEEEEEEEEE11111111111111111");
 }
 
+bool checksamefile(LPCTSTR pF1, LPCTSTR pF2)
+{
+	bool ret =false;
+	BYTE* pB1=NULL, *pB2=NULL;
+	HANDLE h1 = CreateFile(pF1,
+		GENERIC_READ,
+		FILE_SHARE_READ,
+		NULL,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
+		NULL);
+	HANDLE h2 = CreateFile(pF2,
+		GENERIC_READ,
+		FILE_SHARE_READ,
+		NULL,
+		OPEN_EXISTING,
+		FILE_ATTRIBUTE_NORMAL,
+		NULL);
+
+	if(h1==INVALID_HANDLE_VALUE || h2==INVALID_HANDLE_VALUE)
+		goto error;
+
+	DWORD size1 = GetFileSize(h1,NULL);
+	DWORD size2 = GetFileSize(h2,NULL);
+	if(size1 != size2)
+		goto error;
+
+	pB1 = (BYTE*)malloc(size1);
+	pB2 = (BYTE*)malloc(size2);
+
+	DWORD dwRead1, dwRead2;
+	ReadFile(h1, pB1, size1, &dwRead1, NULL);
+	ReadFile(h2, pB2, size2, &dwRead2, NULL);
+
+	if(memcmp(pB1, pB2, size1) != 0)
+		goto error;
+
+	ret = true;
+error:
+	CloseHandle(h1);
+	CloseHandle(h2);
+	free(pB1);
+	free(pB2);
+
+	return ret;
+}
+
 bool checksamestring(LPCTSTR sec, LPCTSTR key, LPCTSTR file)
 {
 	String^ a1="a1";
@@ -242,10 +289,39 @@ int main(array<System::String ^> ^args)
 
 
 	
-	GetCurrentDirectory(512, szFile);
-	lstrcat(szFile, _T("\\Test.wini5"));
-	WritePrivateProfileStringW(L"SEC", L"space", L"   ", szFile);
-	return 0;
+	//GetCurrentDirectory(512, szFile);
+	//lstrcat(szFile, _T("\\Test.wini5"));
+	//WritePrivateProfileStringW(L"SEC", L"space", L"   ", szFile);
+
+
+
+	// multiline
+	{
+		TCHAR szFile2[MAX_PATH];
+
+		GetCurrentDirectory(512, szFile);
+		lstrcat(szFile, _T("\\newfile1"));
+
+		GetCurrentDirectory(512, szFile2);
+		lstrcat(szFile2, _T("\\newfile2"));
+
+		LPCTSTR pMultiLine=_T("AAA\r\nBBB\r\nCCC");
+		WritePrivateProfileStringW(L"SEC", L"MM", pMultiLine, szFile);
+		Profile::WriteString(L"SEC", L"MM", gcnew String(pMultiLine), gcnew String(szFile2));
+
+		if(!checksamefile(szFile, szFile2))
+			errorhappen111();
+
+		TCHAR szT[36];
+		GetPrivateProfileStringW(L"SEC", L"MM", L"",szT,36, szFile);
+
+		if(!checksamestringandint(_T("SEC"), _T("MM"), szFile))
+			errorhappen111();
+
+
+
+	}
+		return 0;
 }
 
 void unusedfunc()
