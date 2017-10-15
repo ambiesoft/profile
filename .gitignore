@@ -4,3 +4,16 @@ Profile/Profile/obj/
 Profile/ProfileBasicTest/bin/
 Profile/ProfileBasicTest/obj/
 
+Profile/Profile.2013.v12.suo
+
+ProfileCompatTest/ProfileTest.2013.sdf
+Profile/ProfileBasicTest/ProfileBasicTest.2013.csproj.user
+
+ProfileCompatTest/Debug/
+ProfileCompatTest/ProfileTest/Debug/
+ProfileCompatTest/ProfileTest.2013.v12.suo
+
+ProfileCompatTest/ipch/
+ProfileCompatTest/ProfileTest/newfile1
+ProfileCompatTest/ProfileTest/newfile2
+
