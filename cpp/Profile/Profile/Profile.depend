@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1446667744 source:c:\t\profile\profile\main.cpp
+	"main.h"
+
+1446667744 c:\t\profile\profile\main.h
+	<windows.h>
+
+1512470346 source:c:\t\profile\profile\profile.cpp
+	"profile.h"
+
+1512470434 c:\t\profile\profile\profile.h
+	<windows.h>
+

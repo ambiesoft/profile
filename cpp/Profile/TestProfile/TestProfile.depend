@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1512469868 source:c:\t\profile\testprofile\main.cpp
+	<iostream>
+	"../Profile/profile.h"
+
+1446667744 c:\t\profile\profile\main.h
+	<windows.h>
+
+1512470434 c:\t\profile\profile\profile.h
+	<windows.h>
+
