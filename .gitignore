@@ -1,19 +1,27 @@
-Profile/Profile.suo
-Profile/Profile/bin/
-Profile/Profile/obj/
-Profile/ProfileBasicTest/bin/
-Profile/ProfileBasicTest/obj/
+cli/Profile/Profile.2013.v12.suo
+cli/Profile/Profile/bin/
+cli/Profile/Profile/obj/
 
-Profile/Profile.2013.v12.suo
+cli/Profile/ProfileBasicTest/bin/
+cli/Profile/ProfileBasicTest/obj/
 
-ProfileCompatTest/ProfileTest.2013.sdf
-Profile/ProfileBasicTest/ProfileBasicTest.2013.csproj.user
 
-ProfileCompatTest/Debug/
-ProfileCompatTest/ProfileTest/Debug/
-ProfileCompatTest/ProfileTest.2013.v12.suo
+cli/ProfileCompatTest/Debug/
+cli/ProfileCompatTest/ProfileTest.2013.sdf
+cli/ProfileCompatTest/ProfileTest.2013.v12.suo
+cli/ProfileCompatTest/ProfileTest/Debug/
+cli/ProfileCompatTest/ProfileTest/newfile1
+cli/ProfileCompatTest/ProfileTest/newfile2
+cli/ProfileCompatTest/ProfileTest/still.wini
+cli/ProfileCompatTest/ipch/
 
-ProfileCompatTest/ipch/
-ProfileCompatTest/ProfileTest/newfile1
-ProfileCompatTest/ProfileTest/newfile2
+
+cpp/Profile/.vs/
+cpp/Profile/Profile/Win32/
+cpp/Profile/Profile/obj/
+cpp/Profile/Profile/x64/
+cpp/Profile/TestProfile/Win32/
+cpp/Profile/TestProfile/obj/
+cpp/Profile/build/
+cpp/Profile/x64/
 

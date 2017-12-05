@@ -9,6 +9,19 @@ namespace Ambiesoft
 {
     partial class Profile
     {
+        static private string getSectionName(string line)
+        {
+            StringBuilder sbRet = new StringBuilder();
+            for (int i = 1; i < line.Length; ++i)
+            {
+                Char c = line[i];
+                if (c == ']')
+                    break;
+
+                sbRet.Append(c);
+            }
+            return sbRet.ToString();
+        }
         static public HashIni ReadAll(String inipath)
         {
             return ReadAll(inipath, false);
@@ -36,7 +49,7 @@ namespace Ambiesoft
 
                         if (line[0] == '[')
                         {
-                            String secname = line.Trim(new char[] { '[', ']' });
+                            String secname = getSectionName(line);
                             cursec = (Hashtable)al[secname];
                             if (cursec == null)
                             {

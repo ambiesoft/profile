@@ -11,3 +11,11 @@
 1512470434 c:\t\profile\profile\profile.h
 	<windows.h>
 
+1512485127 source:c:\local\msys32\home\fjunc\gitdev\profile\cpp\profile\profile\dllmain.cpp
+	"profile.h"
+
+1512487745 c:\local\msys32\home\fjunc\gitdev\profile\cpp\profile\profile\profile.h
+	<windows.h>
+	<map>
+	<string>
+

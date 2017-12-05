@@ -70,7 +70,12 @@ bool checksamestring(LPCTSTR sec, LPCTSTR key, LPCTSTR file)
 	
 	Profile::GetString(gcnew String(sec), gcnew String(key), _T(""), a2, gcnew String(file));
 	
-	return a1==a2;
+	if (a1 == a2)
+		return true;
+
+	Console::Error->WriteLine(String::Format("string failed:sec={0}, key={1}, file={2} ({3} != {4}",
+		gcnew String(sec), gcnew String(key), gcnew String(file), a1, a2));
+	return false;
 }
 bool checksameint(LPCTSTR sec, LPCTSTR key, LPCTSTR file)
 {
@@ -78,12 +83,22 @@ bool checksameint(LPCTSTR sec, LPCTSTR key, LPCTSTR file)
 	int a2=2;
 	a1 = GetPrivateProfileInt(sec, key, 0, file);
 	Profile::GetInt(gcnew String(sec), gcnew String(key), 0, a2, gcnew String(file));
-	return a1==a2;
+	if (a1 == a2)
+		return true;
+
+	Console::Error->WriteLine(String::Format("int failed:sec={0}, key={1}, file={2} ({3} != {4}",
+		gcnew String(sec),gcnew String(key),gcnew String(file) , a1, a2));
+	return false;
 }
 
 bool checksamestringandint(LPCTSTR sec, LPCTSTR key, LPCTSTR file)
 {
-	return checksamestring(sec,key,file) && checksameint(sec,key,file)  ;
+	if (!checksamestring(sec, key, file))
+		return false;
+	if (!checksameint(sec, key, file))
+		return false;
+
+	return true;
 }
 
 void temptest()
@@ -95,11 +110,22 @@ void temptest()
 int main(array<System::String ^> ^args)
 {
 	temptest();
+	
+	TCHAR szBuff[32];
+	TCHAR szCurrentDir[512];
+	GetCurrentDirectory(512, szCurrentDir);
+	lstrcat(szCurrentDir, _T("\\"));
 
 	TCHAR szFile[512];
-	GetCurrentDirectory(512, szFile);
-	lstrcat(szFile, _T("\\Test.wini"));
-	
+	lstrcpy(szFile, szCurrentDir);
+	lstrcat(szFile, _T("Test.wini"));
+
+
+	// API SPACE test -> get is trimmed
+	{
+		WritePrivateProfileString(_T("SECTION_W"), _T("SPACE"), _T("THEVALUE	"), szFile);
+		GetPrivateProfileString(_T("SECTION_W"), _T("SPACE"), _T(""), szBuff, 32, szFile);
+	}
 	WritePrivateProfileString(_T("SECTION_W"), _T("THEKEY"), _T("THEVALUE"), szFile);
 
 	Profile::WriteString("SECTION_W", "THEKEY", "THEVALUE", "Test.wini");
@@ -247,7 +273,7 @@ int main(array<System::String ^> ^args)
 	Profile::GetString("AAA",nullptr,nullptr,s,(gcnew String(szFile))+"xxx");
 
 
-	TCHAR szBuff[32];
+
 	GetCurrentDirectory(512, szFile);
 	lstrcat(szFile, _T("\\Test.wini4"));
 	int po;
@@ -321,7 +347,38 @@ int main(array<System::String ^> ^args)
 
 
 	}
-		return 0;
+		
+	
+	// section format test (Fixed)
+	{
+		TCHAR szFileSecTest[MAX_PATH] ;
+		lstrcpy(szFileSecTest, szCurrentDir);
+		lstrcat(szFileSecTest, L"Test.SectionFormat.wini");
+		if (!checksamestringandint(_T("SEC"), _T("a"), szFileSecTest))
+			errorhappen111();
+	}
+
+	// dont change existing
+	// API add new string at last
+	// API tries to keep the file as it is
+	{
+		TCHAR szFileChangeExistingTest[MAX_PATH];
+		lstrcpy(szFileChangeExistingTest, szCurrentDir);
+		lstrcat(szFileChangeExistingTest, L"still.wini");
+		System::IO::StreamWriter sw(gcnew String(szFileChangeExistingTest));
+		sw.WriteLine("STILL");
+		sw.WriteLine("[SEC]");
+		sw.WriteLine("APPXX");
+		sw.WriteLine("");
+		sw.WriteLine("BPP");
+		sw.WriteLine("");
+		sw.WriteLine("");
+		sw.WriteLine("APP=ssss");
+		sw.Close();
+
+		WritePrivateProfileString(L"SEC", L"APP", L"AAA", szFileChangeExistingTest);
+	}
+	return 0;
 }
 
 void unusedfunc()

@@ -95,7 +95,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="Ambiesoft.Profile">
-      <HintPath>..\..\..\..\..\..\..\Linkout\DNAssembly.NET4\Ambiesoft.Profile.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\..\Linkout\DNAssembly.NET4\Ambiesoft.Profile.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Test.otita" />
+    <None Include="Test.SectionFormat.wini" />
     <None Include="Test.wini" />
     <None Include="Test.wini.new" />
     <None Include="Test.wini.new2" />

@@ -3,26 +3,33 @@
 
 #include <windows.h>
 
+#include <map>
+#include <string>
+
 /*  To use this exported function of dll, include this header
  *  in your project.
  */
 
-#ifdef BUILD_DLL
+#ifdef PROFILE_EXPORTS
     #define DLL_EXPORT __declspec(dllexport)
 #else
     #define DLL_EXPORT __declspec(dllimport)
 #endif
 
 namespace Ambiesoft {
-    class DLL_EXPORT HashIni
+    class HashIni
     {
-        typedef HashType std::map<std::wstring, std::wstring>;
+	public:
+		typedef std::map<std::wstring, std::wstring> HashType;
+
+	private:
         HashType hash_;
         HashIni()
         {
         }
 
     public:
+
         HashType& Hash()
         {
             return hash_;
@@ -36,9 +43,9 @@ namespace Ambiesoft {
 
     struct DLL_EXPORT Profile
     {
-        static void DLL_EXPORT ssss();
+        static void ssss();
 
-        static HashIni* DLL_EXPORT ReadAll(const char* file);
+        static HashIni* ReadAll(const char* file, bool throwexception = false);
     };
 }
 

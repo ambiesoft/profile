@@ -8,9 +8,12 @@ using namespace Ambiesoft;
 
 int main()
 {
-    SomeFunction("aaa");
+    // SomeFunction("aaa");
+
 
     Profile::ssss();
+
+	HashIni* pIni = Profile::ReadAll("TestProfile.ini", false);
 
     cout << "Hello world!" << endl;
     return 0;

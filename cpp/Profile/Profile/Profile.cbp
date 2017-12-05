@@ -15,8 +15,9 @@
 				<Option createStaticLib="1" />
 				<Compiler>
 					<Add option="-Wall" />
-					<Add option="-DBUILD_DLL" />
 					<Add option="-g" />
+					<Add option="-DPROFILE_EXPORTS" />
+					<Add directory="G:/boost_1_65_1" />
 				</Compiler>
 				<Linker>
 					<Add library="user32" />
@@ -30,9 +31,9 @@
 				<Option createDefFile="1" />
 				<Option createStaticLib="1" />
 				<Compiler>
-					<Add option="-Wall" />
-					<Add option="-DBUILD_DLL" />
 					<Add option="-O2" />
+					<Add option="-Wall" />
+					<Add option="-DPROFILE_EXPORTS" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -40,8 +41,8 @@
 				</Linker>
 			</Target>
 		</Build>
+		<Unit filename="Profile.cpp" />
 		<Unit filename="dllmain.cpp" />
-		<Unit filename="profile.cpp" />
 		<Unit filename="profile.h" />
 		<Extensions>
 			<code_completion />
