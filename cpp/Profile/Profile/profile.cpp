@@ -19,10 +19,33 @@ void DLL_EXPORT Profile::ssss()
 
 }
 
+std::pair<wstring,wstring> splitLine(const wstring& line)
+{
+    size_t pos = line.find(L'=',0);
+    if(pos==std::nopos)
+        hihihu
+    wstring key=line.substr(0,pos);
+}
+static wstring Profile::getSectionName(const wstring& line)
+{
+    wstring ret;
+    if(line.empty() || line[0]!=L'[')
+        return ret;
+
+    for(int i=1;i <line.size(); ++i)
+    {
+        wchar_t c = line[i];
+        if(c==L']')
+            break;
+
+        ret.append(c);
+    }
+    return ret;
+}
 HashIni* Profile::ReadAll(const char* file, bool throwexception)
 {
 	HashIni* hi = HashIni::CreateEmptyInstanceForSpecialUse();
-	HashIni::HashType& al = hi->Hash();
+	HashIni::HashAll& al = hi->Hash();
 
 	try
 	{
@@ -37,20 +60,40 @@ HashIni* Profile::ReadAll(const char* file, bool throwexception)
 		if (fs)
 		{
 			wstring line;
-			
+			shared_ptr<HashSection> cursec = nullptr;
+
 			while (getline(fs,line))
 			{
 				boost::algorithm::trim_left(line);
 				if (line.empty() || line[0] == L'#')
 					continue;
 
-				// TODO: from here, check section format([aaa])
+				if(line[0]==L'[')
+                {
+                    wcstring secname = GetSectionName(line);
+                    cursec = al[secname];
+                    if(!cursec)
+                    {
+                        cursec=make_shared(new HashIni::HashSection());
+                        al[secname]=cursec;
+                    }
+                    continue;
+                }
+                else  // not a section line
+                {
+                    if(!cursec)
+                        continue;
+
+                    std::pair<wstring,wstring> vals = splitLine(line);
+
+                }
+
 			}
 		}
 		return hi;
 	}
 	catch (std::exception& e)
-	{ 
+	{
 		if (throwexception)
 			throw e;
 	}

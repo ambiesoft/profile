@@ -11,6 +11,9 @@ namespace Ambiesoft
     {
         static private string getSectionName(string line)
         {
+        	if(String::IsNullOrEmpty(line) || line[0] != L'[')
+        		return String::Empttttt// please debug
+        		
             StringBuilder sbRet = new StringBuilder();
             for (int i = 1; i < line.Length; ++i)
             {

@@ -5,6 +5,7 @@
 
 #include <map>
 #include <string>
+#include <memory>
 
 /*  To use this exported function of dll, include this header
  *  in your project.
@@ -20,17 +21,19 @@ namespace Ambiesoft {
     class HashIni
     {
 	public:
-		typedef std::map<std::wstring, std::wstring> HashType;
+	    typedef std::map<std::wstring, std::wstring> HashSection;
+		typedef std::map<std::wstring, std::shared_ptr<HashSection> > HashAll;
+
 
 	private:
-        HashType hash_;
+        HashAll hash_;
         HashIni()
         {
         }
 
     public:
 
-        HashType& Hash()
+        HashAll& Hash()
         {
             return hash_;
         }
@@ -44,7 +47,7 @@ namespace Ambiesoft {
     struct DLL_EXPORT Profile
     {
         static void ssss();
-
+        static wstring getSectionName(const wstring& line);
         static HashIni* ReadAll(const char* file, bool throwexception = false);
     };
 }
