@@ -15,32 +15,42 @@ using namespace Ambiesoft;
 
 void testwrite()
 {
-	wstring filename = L"TestProfile.ini";
-	HashIni* pIni = Profile::ReadAll(filename.c_str(), false);
+    string filename = "TestProfile.ini";
+    HashIni* pIni = Profile::ReadAll(filename, false);
 
 	VERIFY(Profile::WriteInt(L"mysection", L"mykey", 12345, pIni));
 	VERIFY(Profile::WriteInt(L"mysection", L"mykey", 54321, pIni));
 
 	VERIFY(Profile::WriteInt(L"mysection", L"mykey2", 21, pIni));
 
-	VERIFY(Profile::WriteInt(L"mysection2", L"mykey22", 21, pIni));
+	VERIFY(Profile::WriteInt(L"mysection2", L"mykey21", 212, pIni));
 	VERIFY(Profile::WriteString(L"mysection2", L"mykey22", L"あああ", pIni));
 
-	VERIFY(Profile::WriteAll(pIni, filename.c_str()));
+    VERIFY(Profile::WriteAll(pIni, filename));
 	
 	delete pIni;
 }
 void testread()
 {
-	wstring filename = L"TestProfile.ini";
-	HashIni* pIni = Profile::ReadAll(filename.c_str(), false);
+    string filename = "TestProfile.ini";
+    HashIni* pIni = Profile::ReadAll(filename, false);
 
-	Profile::ReadInt()
+	int intval;
+	wstring sval;
+	Profile::GetInt(L"mysection", L"mykey", -1, intval, pIni);
+	assert(intval == 54321);
+	Profile::GetInt(L"mysection", L"mykey2", -1, intval, pIni);
+	assert(intval == 21);
+	Profile::GetInt(L"mysection2", L"mykey21", -1, intval, pIni);
+	assert(intval == 212);
+
+	Profile::GetString(L"mysection2", L"mykey22", wstring(), sval, pIni);
+	assert(sval == L"あああ");
+
+	delete pIni;
 }
 int main()
 {
-    Profile::ssss();
-
 	testwrite();
 	testread();
     return 0;

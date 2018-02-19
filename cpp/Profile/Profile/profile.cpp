@@ -1,7 +1,9 @@
 #include "profile.h"
+#include <string>
 
-using namespace std;
 namespace Ambiesoft
 {
+
+
 } // namespace
 

@@ -98,7 +98,7 @@ namespace Ambiesoft {
 			return ret;
 		}
         
-		static HashIni* ReadAll(const wchar_t* file, bool throwexception = false)
+                static HashIni* ReadAll(const std::string& file, bool throwexception = false)
 		{
 			HashIni* hi = HashIni::CreateEmptyInstanceForSpecialUse();
 			HashIni::HashAll& al = hi->Hash();
@@ -109,8 +109,11 @@ namespace Ambiesoft {
 				//mutex = createmutex(inipath);
 				//waitmutex(mutex);
 
-				std::wifstream fs;
-				fs.open(file);
+                                std::wifstream fs;
+                                fs.open(file);
+                                if(!fs)
+                                    throw std::exception();
+
 				static_assert(sizeof(wchar_t) == 2, "error.");//Linux is no ready
 				fs.imbue(std::locale(std::locale(""), new std::codecvt_utf8_utf16<wchar_t, 0x10ffff, std::consume_header>()));
 				if (fs)
@@ -147,7 +150,7 @@ namespace Ambiesoft {
 							if (!vals.second.empty())
 								vals.second = wpTrim(vals.second);
 
-							std::vector<std::wstring>& arent = cursec->at(vals.first);
+							std::vector<std::wstring>& arent = (*cursec)[vals.first];
 							//if (arent == null)
 							//{
 							//	arent = new ArrayList();
@@ -168,11 +171,11 @@ namespace Ambiesoft {
 			}
 			return hi;
 		}
-		static bool WriteAll(HashIni* hi, const wchar_t* inipath)
+                static bool WriteAll(HashIni* hi, const std::string& inipath)
 		{
 			return WriteAll(hi, inipath, false);
 		}
-		static bool WriteAll(HashIni* hi, const wchar_t* inipath, bool throwexception){
+                static bool WriteAll(HashIni* hi, const std::string& inipath, bool throwexception){
 			if (hi == nullptr)
 				return false;
 
@@ -186,6 +189,9 @@ namespace Ambiesoft {
 
 				std::wofstream ofs;
 				ofs.open(inipath);
+                                if(!ofs)
+                                    throw std::exception();
+
 				ofs.imbue({ {}, new std::codecvt_utf8<wchar_t, 0x10FFFF, std::consume_header> });
 
 
@@ -208,7 +214,7 @@ namespace Ambiesoft {
 
 						for (HashIni::HashSection::iterator its = sec->begin(); its != sec->end(); ++its)
 						{
-							std::wstring keyname = it->first;
+							std::wstring keyname = its->first;
 							std::vector<std::wstring>& arent = its->second;
 							for (std::wstring& val : arent)
 							{
@@ -242,6 +248,30 @@ namespace Ambiesoft {
 			return true;
 		}
 
+		static bool GetString(const std::wstring& app, const std::wstring& key, const std::wstring& def, std::wstring& ret, HashIni* hi)
+		{
+			ret = def;
+			if (hi == nullptr)
+				return false;
+
+			if (app.empty())
+				return false;
+
+			if (key.empty())
+				return false;
+
+			std::shared_ptr<HashIni::HashSection> sec = hi->Hash()[app];
+			if (sec == nullptr)
+				return false;
+
+			std::vector<std::wstring>& arent = (*sec)[key];
+			
+			if (arent.empty())
+				return false;
+
+			ret  = arent[0];
+			return true;
+		}
 		static bool WriteString(const wchar_t* app, const wchar_t* key, const wchar_t* val, HashIni* hi)
 		{
 			if (hi == nullptr)
@@ -270,6 +300,29 @@ namespace Ambiesoft {
 			{
 				arent[0] = val;
 			}
+			return true;
+		}
+
+		static bool GetInt(const std::wstring& app, const std::wstring& key, int def, int& ret, HashIni* hi)
+		{
+			ret = def;
+
+			std::wstring sret;
+			if (!GetString(app, key, std::wstring(), sret, hi))
+				return false;
+
+			if (sret.empty())
+				return false;
+
+			try
+			{
+				ret = std::stoi(sret);
+			}
+			catch (std::exception&)
+			{
+				return false;
+			}
+
 			return true;
 		}
 		static bool WriteInt(const wchar_t* app, const wchar_t* key, int val, HashIni* hi)
