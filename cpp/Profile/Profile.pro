@@ -10,3 +10,6 @@ win32 {
 
 SOURCES += \
     TestProfile/main.cpp
+
+HEADERS += \
+    Profile/profile.h
