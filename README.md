@@ -6,7 +6,7 @@
 Add reference to *Ambiesoft.Profile.dll*.
 
 code example:
-```
+```cpp
 string inipath = Application.ExecutablePath + ".ini";
 Profile.WriteInt("sec", "aaa", 12345, inipath);
 Profile.GetInt("sec", "aaa", 0, out i, inipath);
@@ -16,7 +16,7 @@ Profile.GetInt("sec", "aaa", 0, out i, inipath);
 Include *Profile.h*.
 
 code example:
-```
+```cpp
 #include "dir/Profile.h"
 using namespace Ambiesoft;
 
