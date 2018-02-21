@@ -46,6 +46,8 @@ Ini File will be loaded and saved with UTF8.
 - bool
  
 ## License
-Public Domain
+MIT 2 clause
+
+
 
 
