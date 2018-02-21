@@ -113,9 +113,6 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Test.otita" />
     <None Include="Test.SectionFormat.wini" />
     <None Include="Test.wini" />
