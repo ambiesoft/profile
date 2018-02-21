@@ -15,7 +15,7 @@ using namespace Ambiesoft;
 
 void testwrite(string filename)
 {
-    HashIniHandle ini = Profile::ReadAll(filename, false);
+	HashIniHandle ini = Profile::ReadAll(filename, false);
 
 	VERIFY(Profile::WriteInt("mysection", "mykey", 12345, ini));
 	VERIFY(Profile::WriteInt("mysection", "mykey", 54321, ini));
@@ -25,13 +25,13 @@ void testwrite(string filename)
 	VERIFY(Profile::WriteInt("mysection2", "mykey21", 212, ini));
 	VERIFY(Profile::WriteString("mysection2", "mykey22", u8"あああ", ini));
 
-    VERIFY(Profile::WriteAll(ini, filename));
-	
+	VERIFY(Profile::WriteAll(ini, filename));
+
 	Profile::FreeHandle(ini);
 }
 void testread(string filename)
 {
-    HashIniHandle ini = Profile::ReadAll(filename, false);
+	HashIniHandle ini = Profile::ReadAll(filename, false);
 
 	int intval;
 	string sval;
@@ -47,6 +47,15 @@ void testread(string filename)
 
 	Profile::FreeHandle(ini);
 }
+void testdirect(const string& inifile)
+{
+	Profile::WriteInt("MySection", "MyKey", 666666, inifile);
+	
+	int intval;
+	Profile::GetInt("MySection", "MyKey", 0, intval, inifile);
+	assert(intval == 666666);
+}
+
 bool file_exists(string file)
 {
 	ifstream my_file(file);
@@ -60,5 +69,7 @@ int main()
 
 	testwrite(filename);
 	testread(filename);
-    return 0;
+
+	testdirect(filename);
+	return 0;
 }
