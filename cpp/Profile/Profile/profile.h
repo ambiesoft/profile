@@ -29,11 +29,57 @@
 #include <vector>
 #include <fstream>
 // #include <codecvt>
+#include <algorithm> 
+#include <cctype>
+#include <locale>
 
-#include <boost/algorithm/string/trim.hpp>
+// #include <boost/algorithm/string/trim.hpp>
 
 namespace Ambiesoft {
 	typedef void* HashIniHandle;
+
+	static inline bool myisspace(char c)
+	{
+		return c == ' ' || c == '\t' || c == '\n' || c == '\n';
+	}
+	// https://stackoverflow.com/a/217605
+	// trim from start (in place)
+	static inline void ltrim(std::string &s) {
+		s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+			return !myisspace(ch);
+		}));
+	}
+
+	// trim from end (in place)
+	static inline void rtrim(std::string &s) {
+		s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+			return !myisspace(ch);
+		}).base(), s.end());
+	}
+
+	// trim from both ends (in place)
+	static inline void trim(std::string &s) {
+		ltrim(s);
+		rtrim(s);
+	}
+
+	// trim from start (copying)
+	static inline std::string ltrim_copy(std::string s) {
+		ltrim(s);
+		return s;
+	}
+
+	// trim from end (copying)
+	static inline std::string rtrim_copy(std::string s) {
+		rtrim(s);
+		return s;
+	}
+
+	// trim from both ends (copying)
+	static inline std::string trim_copy(std::string s) {
+		trim(s);
+		return s;
+	}
 
 	// https://stackoverflow.com/a/2072890
 	static bool ends_with(std::string const & value, std::string const & ending)
@@ -47,7 +93,7 @@ namespace Ambiesoft {
 		if (sin.empty())
 			return sin;
 
-		std::string sout = boost::algorithm::trim_copy(sin);
+		std::string sout = trim_copy(sin); // boost::algorithm::trim_copy(sin);
 		if (sout.empty())
 			return sout;
 
@@ -186,7 +232,7 @@ namespace Ambiesoft {
 
 					while (getline(ifs, line))
 					{
-						boost::algorithm::trim_left(line);
+						ltrim(line); // boost::algorithm::trim_left(line);
 						if (line.empty() || line[0] == '#')
 							continue;
 
@@ -319,7 +365,11 @@ namespace Ambiesoft {
 		}
 
         // String starts ----------------
-		static bool GetString(const std::string& app, const std::string& key, const std::string& def, std::string& ret, HashIniHandle hih)
+		static bool GetString(const std::string& app, 
+			const std::string& key, 
+			const std::string& def,
+			std::string& ret, 
+			HashIniHandle hih)
 		{
 			HashIni* hi = static_cast<HashIni*>(hih);
 			ret = def;
@@ -343,6 +393,15 @@ namespace Ambiesoft {
 
 			ret = arent[0];
 			return true;
+		}
+		static bool GetString(const std::string& app,
+			const std::string& key,
+			const std::string& def,
+			std::string& ret,
+			std::string& inifile)
+		{
+			HashIniHandleWrapper ini(ReadAll(inifile));
+			return GetString(app, key, def, ret, ini);
 		}
         static bool WriteString(const std::string& app,
                                 const std::string& key,
@@ -423,7 +482,8 @@ namespace Ambiesoft {
         static bool GetInt(const std::string& app,
                            const std::string& key,
                            int def,
-                           int& ret, HashIniHandle hih)
+                           int& ret,
+			HashIniHandle hih)
 		{
 			HashIni* hi = static_cast<HashIni*>(hih);
 			ret = def;
