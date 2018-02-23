@@ -23,8 +23,10 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #if _MSC_VER <= 1800
 #pragma warning( disable : 4503 ) 
+#endif
 #endif
 
 #include <map>
