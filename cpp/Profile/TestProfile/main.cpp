@@ -24,6 +24,9 @@
 #include <cassert>
 #include <string>
 #include <vector>
+#include <memory>
+#include <cstring>
+
 
 #ifdef _DEBUG
 #define VERIFY(s) assert(s)
@@ -51,8 +54,8 @@ void testwrite(string filename)
 	VERIFY(Profile::WriteString("mysection2", "mykey22", u8"あああ", ini));
 
 
-
-
+	vector<string> v = { "aaa","bbb" };
+	VERIFY(Profile::WriteStringArray("sa", "sak", v, ini));
 
 	VERIFY(Profile::WriteAll(ini, filename));
 	Profile::FreeHandle(ini);
@@ -73,12 +76,18 @@ void testread(string filename)
 	Profile::GetString("mysection2", "mykey22", string(), sval, ini);
 	assert(sval == u8"あああ");
 
+	vector<string> v;
+	Profile::GetStringArray("sa", "sak", v, ini);
+	assert(v.size() == 2);
+	assert(v[0] == "aaa");
+	assert(v[1] == "bbb");
+
 	Profile::FreeHandle(ini);
 }
 void testdirect(const string& inifile)
 {
 	Profile::WriteInt("MySection", "MyKey", 666666, inifile);
-	
+
 	int intval;
 	Profile::GetInt("MySection", "MyKey", 0, intval, inifile);
 	assert(intval == 666666);
@@ -86,7 +95,7 @@ void testdirect(const string& inifile)
 
 	vector<unsigned char> v = { 11,22,33 };
 	Profile::WriteBinary("MyBinarySection", "MyBinaryKey", v, inifile);
-	
+
 	vector<unsigned char> vout;
 	Profile::GetBinary("MyBinarySection", "MyBinaryKey", vout, inifile);
 
@@ -102,6 +111,45 @@ void testdirect(const string& inifile)
 	Profile::WriteBool("MBS", "MKB", false, inifile);
 	Profile::GetBool("MBS", "MKB", true, b, inifile);
 	assert(!b);
+
+
+	// vector<string>
+	vector<string> vs = { "abc","xyz","tre",u8"あいいいいううううええええええええええええええ" };
+	Profile::WriteStringArray("vs", "vsk", vs, inifile);
+	vector<string> vsout;
+	Profile::GetStringArray("vs", "vsk", vsout, inifile);
+	assert(vs == vsout);
+
+
+	// binay
+	struct TestS
+	{
+		int a;
+		int b;
+		char c;
+
+		TestS()
+		{
+			a = 0;
+			b = 0;
+			c = 0;
+		}
+		void set()
+		{
+			a = 111;
+			b = 1234555;
+			c = 33;
+		}
+	};
+
+	TestS ts;
+	ts.set();
+	Profile::WriteBinary("ba", "bskey", (unsigned char*)&ts, sizeof(ts), inifile);
+
+	TestS tsout;
+	Profile::GetBinary("ba", "bskey", (unsigned char*)&tsout, inifile);
+
+	assert(memcmp(&ts, &tsout, sizeof(ts)) == 0);
 }
 
 bool file_exists(string file)

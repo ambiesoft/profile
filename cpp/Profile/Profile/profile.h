@@ -133,7 +133,7 @@ namespace Ambiesoft {
 		{
 			return hash_;
 		}
-	
+
 	public:
 		static HashIniHandle CreateEmptyInstanceForSpecialUse()
 		{
@@ -148,21 +148,21 @@ namespace Ambiesoft {
 
 	class Profile
 	{
-        class HashIniHandleWrapper
-        {
-            HashIniHandle h_;
-        public:
-            HashIniHandleWrapper(HashIniHandle h) : h_(h)
-            {}
-            ~HashIniHandleWrapper()
-            {
-                Profile::FreeHandle(h_);
-            }
-            operator HashIniHandle()
-            {
-                return h_;
-            }
-        };
+		class HashIniHandleWrapper
+		{
+			HashIniHandle h_;
+		public:
+			HashIniHandleWrapper(HashIniHandle h) : h_(h)
+			{}
+			~HashIniHandleWrapper()
+			{
+				Profile::FreeHandle(h_);
+			}
+			operator HashIniHandle()
+			{
+				return h_;
+			}
+		};
 
 	public:
 		static std::pair<std::string, std::string> splitLine(const std::string& line)
@@ -285,7 +285,7 @@ namespace Ambiesoft {
 		{
 			return WriteAll(hih, inipath, false);
 		}
-		static bool WriteAll(HashIniHandle hih, const std::string& inipath, bool throwexception) 
+		static bool WriteAll(HashIniHandle hih, const std::string& inipath, bool throwexception)
 		{
 			HashIni* hi = static_cast<HashIni*>(hih);
 			if (hi == nullptr)
@@ -365,11 +365,11 @@ namespace Ambiesoft {
 			delete hi;
 		}
 
-        // String starts ----------------
-		static bool GetString(const std::string& app, 
-			const std::string& key, 
+		// String starts ----------------
+		static bool GetString(const std::string& app,
+			const std::string& key,
 			const std::string& def,
-			std::string& ret, 
+			std::string& ret,
 			HashIniHandle hih)
 		{
 			HashIni* hi = static_cast<HashIni*>(hih);
@@ -404,20 +404,20 @@ namespace Ambiesoft {
 			HashIniHandleWrapper ini(ReadAll(inifile));
 			return GetString(app, key, def, ret, ini);
 		}
-        static bool WriteString(const std::string& app,
-                                const std::string& key,
-                                const char* val,
-                                HashIniHandle hih)
+		static bool WriteString(const std::string& app,
+			const std::string& key,
+			const char* val,
+			HashIniHandle hih)
 		{
 			HashIni* hi = static_cast<HashIni*>(hih);
 
 			if (hi == nullptr)
 				return false;
 
-            if (app.empty())
+			if (app.empty())
 				return false;
 
-            if (key.empty())
+			if (key.empty())
 				return false;
 
 			std::shared_ptr<HashIni::HashSection> sec = hi->Hash()[app];
@@ -429,61 +429,61 @@ namespace Ambiesoft {
 
 			std::vector<std::string>& arent = (*sec)[key];
 
-            if(val != nullptr)
-            {
-                if (arent.empty())
-                {
-                    arent.push_back(val);
-                }
-                else
-                {
-                    arent[0] = val;
-                }
-            }
-            else
-            {
-                // val is null, remove all values
-                arent.clear();
-            }
+			if (val != nullptr)
+			{
+				if (arent.empty())
+				{
+					arent.push_back(val);
+				}
+				else
+				{
+					arent[0] = val;
+				}
+			}
+			else
+			{
+				// val is null, remove all values
+				arent.clear();
+			}
 			return true;
 		}
-        static bool WriteString(const std::string& app,
-                                const std::string& key,
-                                const std::string& val,
-                                HashIniHandle hih)
-        {
-           return WriteString(app,key,val.c_str(),hih);
-        }
-        static bool WriteString(const std::string& app,
-                                const std::string& key,
-                                const std::string& val,
-                                const std::string& inifile)
-        {
-            // Mutex mutex = null;
-            try
-            {
-                // mutex = createmutex(inipath);
-                // waitmutex(mutex);
+		static bool WriteString(const std::string& app,
+			const std::string& key,
+			const std::string& val,
+			HashIniHandle hih)
+		{
+			return WriteString(app, key, val.c_str(), hih);
+		}
+		static bool WriteString(const std::string& app,
+			const std::string& key,
+			const std::string& val,
+			const std::string& inifile)
+		{
+			// Mutex mutex = null;
+			try
+			{
+				// mutex = createmutex(inipath);
+				// waitmutex(mutex);
 
-                HashIniHandleWrapper ini(ReadAll(inifile));
+				HashIniHandleWrapper ini(ReadAll(inifile));
 
-                if (!WriteString(app, key, val, ini))
-                    return false;
+				if (!WriteString(app, key, val, ini))
+					return false;
 
-                return WriteAll(ini, inifile);
-            }
-            catch(std::exception&)
-            {
-                return false;
-            }
-        }
+				return WriteAll(ini, inifile);
+			}
+			catch (std::exception&)
+			{
+				return false;
+			}
+		}
 
 
-        // Int starts ----------------
-        static bool GetInt(const std::string& app,
-                           const std::string& key,
-                           int def,
-                           int& ret,
+		// Int starts ----------------
+		static bool GetInt(const std::string& app,
+			const std::string& key,
+			int def,
+			int& ret,
 			HashIniHandle hih)
 		{
 			HashIni* hi = static_cast<HashIni*>(hih);
@@ -507,31 +507,31 @@ namespace Ambiesoft {
 
 			return true;
 		}
-        static bool GetInt(const std::string& app,
-                           const std::string& key,
-                           int def,
-                           int& ret,
-                           const std::string& inifile)
-        {
-            HashIniHandleWrapper ini(ReadAll(inifile));
-            return GetInt(app, key, def, ret, ini);
-        }
-        static bool WriteInt(const std::string& app,
-                             const std::string& key,
-                             int val,
-                             HashIniHandle hih)
-        {
-            std::string sval = std::to_string(val);
-            return WriteString(app, key, sval, hih);
-        }
-        static bool WriteInt(const std::string& app,
-                             const std::string& key,
-                             int val,
-                             const std::string& inifile)
-        {
-            std::string sval = std::to_string(val);
-            return WriteString(app, key, sval, inifile);
-        }
+		static bool GetInt(const std::string& app,
+			const std::string& key,
+			int def,
+			int& ret,
+			const std::string& inifile)
+		{
+			HashIniHandleWrapper ini(ReadAll(inifile));
+			return GetInt(app, key, def, ret, ini);
+		}
+		static bool WriteInt(const std::string& app,
+			const std::string& key,
+			int val,
+			HashIniHandle hih)
+		{
+			std::string sval = std::to_string(val);
+			return WriteString(app, key, sval, hih);
+		}
+		static bool WriteInt(const std::string& app,
+			const std::string& key,
+			int val,
+			const std::string& inifile)
+		{
+			std::string sval = std::to_string(val);
+			return WriteString(app, key, sval, inifile);
+		}
 
 		static bool GetByte1(char c, unsigned char& b)
 		{
@@ -575,8 +575,8 @@ namespace Ambiesoft {
 			b = (unsigned char)((b1 << 4) | (unsigned char)b2);
 			return true;
 		}
-		
-		
+
+
 		// Binary starts -------------------
 		static bool GetBinary(
 			const std::string& app,
@@ -584,11 +584,29 @@ namespace Ambiesoft {
 			std::vector<unsigned char>& vRet,
 			HashIniHandle hih)
 		{
+			return GetBinary(app, key, &vRet, hih, false);
+		}
+		static bool GetBinary(
+			const std::string& app,
+			const std::string& key,
+			unsigned char* pV,
+			HashIniHandle hih)
+		{
+			return GetBinary(app, key, pV, hih, true);
+		}
+	private:
+		static bool GetBinary(
+			const std::string& app,
+			const std::string& key,
+			void* pVoid,
+			HashIniHandle hih,
+			bool isNavive)
+		{
 			std::string sret;
 			if (!GetString(app, key, std::string(), sret, hih))
 				return false;
 
-			if(sret.empty())
+			if (sret.empty())
 				return false;
 
 			if ((sret.size() % 2) != 0)
@@ -604,23 +622,47 @@ namespace Ambiesoft {
 			}
 
 			size_t length = (sret.size() / 2) - 1;
+
+			unsigned char* pV = nullptr;
+			std::vector<unsigned char>* pVector = nullptr;
+			if (isNavive)
+				pV = static_cast<unsigned char*>(pVoid);
+			else
+				pVector = static_cast<std::vector<unsigned char>*>(pVoid);
+
 			// byte[] ret = new byte[length];
-			vRet.resize(length);
+			if(pVector)
+				pVector->resize(length);
 
 			int i = 0;
 			int bi = 0;
 			unsigned char sum = 0;
 			unsigned char bu;
 			int length2 = length * 2;
-			for (i = 0; i < length2; i += 2, ++bi)
+
+			if (isNavive)
 			{
-				if (!GetByte(sret[i], sret[i + 1], bu))
-					return false;
+				for (i = 0; i < length2; i += 2, ++bi)
+				{
+					if (!GetByte(sret[i], sret[i + 1], bu))
+						return false;
 
-				vRet[bi] = bu;
-				sum += vRet[bi];
+					pV[bi] = bu;
+					sum += pV[bi];
+				}
 			}
+			else
+			{
+				for (i = 0; i < length2; i += 2, ++bi)
+				{
+					if (!GetByte(sret[i], sret[i + 1], bu))
+						return false;
 
+					(*pVector)[bi] = bu;
+					sum += (*pVector)[bi];
+				}
+			}
+			
 			if (!GetByte(sret[i], sret[i + 1], bu))
 				return false;
 
@@ -629,13 +671,23 @@ namespace Ambiesoft {
 
 			return true;
 		}
+	public:
+		static bool GetBinary(
+			const std::string& app,
+			const std::string& key,
+			unsigned char* pV,
+			const std::string& inipath)
+		{
+			HashIniHandleWrapper hih = ReadAll(inipath);
+			return GetBinary(app, key, pV, hih);
+		}
 		static bool GetBinary(
 			const std::string& app,
 			const std::string& key,
 			std::vector<unsigned char>& vRet,
 			const std::string& inipath)
 		{
-			HashIniHandle hih = ReadAll(inipath);
+			HashIniHandleWrapper hih = ReadAll(inipath);
 			return GetBinary(app, key, vRet, hih);
 		}
 
@@ -673,18 +725,28 @@ namespace Ambiesoft {
 			const std::vector<unsigned char>& v,
 			HashIniHandle hih)
 		{
+			return WriteBinary(app, key, v.data(), v.size(), hih);
+		}
+		static bool WriteBinary(
+			const std::string& app,
+			const std::string& key,
+			const unsigned char* pV,
+			size_t size,
+			HashIniHandle hih)
+		{
 			unsigned char sum = 0;
 
 			std::string sb; // = new StringBuilder((arent.Length * 2) + 2);
 			char sc2[2];
-			for(unsigned char b : v)
+			for (size_t i=0 ; i < size ; ++i)
 			{
+				unsigned char b = pV[i];
 				GetString(b, sc2);
-				sb.append(sc2, sc2+2);
+				sb.append(sc2, sc2 + 2);
 				sum += b;
 			}
 			GetString(sum, sc2);
-			sb.append(sc2, sc2+2);
+			sb.append(sc2, sc2 + 2);
 
 			return WriteString(app, key, sb, hih);
 		}
@@ -692,6 +754,15 @@ namespace Ambiesoft {
 			const std::string& app,
 			const std::string& key,
 			const std::vector<unsigned char>& v,
+			const std::string& inipath)
+		{
+			return WriteBinary(app, key, v.data(), v.size(), inipath);
+		}
+		static bool WriteBinary(
+			const std::string& app,
+			const std::string& key,
+			const unsigned char* pV,
+			size_t size,
 			const std::string& inipath)
 		{
 			// Mutex mutex = null;
@@ -703,7 +774,7 @@ namespace Ambiesoft {
 				if (hih == nullptr)
 					return false;
 
-				if (!WriteBinary(app, key, v, hih))
+				if (!WriteBinary(app, key, pV, size, hih))
 					return false;
 
 				return WriteAll(hih, inipath);
@@ -736,7 +807,7 @@ namespace Ambiesoft {
 			bool& ret,
 			const std::string& inipath)
 		{
-			HashIniHandle hih = ReadAll(inipath);
+			HashIniHandleWrapper hih = ReadAll(inipath);
 			return GetBool(app, key, def, ret, hih);
 		}
 		static bool GetBool(
@@ -755,7 +826,7 @@ namespace Ambiesoft {
 			if (sret.empty())
 				return false;
 
-			
+
 			if (iequals(sret, "yes") ||
 				iequals(sret, "on") ||
 				iequals(sret, "true"))
@@ -786,7 +857,82 @@ namespace Ambiesoft {
 		{
 			return WriteInt(app, key, val ? 1 : 0, inipath);
 		}
-    };
+
+
+		// vector<string> starts ------------
+		static bool GetStringArray(const std::string& app,
+			const std::string& key,
+			std::vector<std::string>& vs,
+			HashIniHandle hih)
+		{
+			HashIni* hi = static_cast<HashIni*>(hih);
+
+			if (hi == nullptr)
+				return false;
+
+			if (app.empty())
+				return false;
+
+			if (key.empty())
+				return false;
+
+			std::shared_ptr<HashIni::HashSection> sec = hi->Hash()[app];
+			if (sec == nullptr)
+				return false;
+
+			vs = (*sec)[key];
+
+			return true;
+		}
+		static bool GetStringArray(const std::string& app,
+			const std::string& key,
+			std::vector<std::string>& vs,
+			const std::string& inipath)
+		{
+			HashIniHandleWrapper hih(ReadAll(inipath));
+			return GetStringArray(app, key, vs, hih);
+		}
+		static bool WriteStringArray(
+			const std::string& app,
+			const std::string& key,
+			const std::vector<std::string>& vs,
+			const std::string& inifile)
+		{
+			HashIniHandleWrapper ini(ReadAll(inifile));
+
+			if (!WriteStringArray(app, key, vs, ini))
+				return false;
+
+			return WriteAll(ini, inifile);
+		}
+		static bool WriteStringArray(
+			const std::string& app,
+			const std::string& key,
+			const std::vector<std::string>& vs,
+			HashIniHandle hih)
+		{
+			HashIni* hi = static_cast<HashIni*>(hih);
+
+			if (hi == nullptr)
+				return false;
+
+			if (app.empty())
+				return false;
+
+			if (key.empty())
+				return false;
+
+			std::shared_ptr<HashIni::HashSection> sec = hi->Hash()[app];
+			if (!sec)
+			{
+				sec = std::make_shared<HashIni::HashSection>();
+				hi->Hash()[app] = sec;
+			}
+
+			(*sec)[key] = vs;
+			return true;
+		}
+	};
 
 
 }
