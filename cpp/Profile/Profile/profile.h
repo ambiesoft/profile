@@ -26,10 +26,12 @@
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #ifdef _MSC_VER
 #if _MSC_VER <= 1900
-#pragma warning( disable : 4503 ) 
+#pragma warning( disable : 4503 )
 #endif
 #endif
 #endif
+
+
 
 #include <map>
 #include <string>
@@ -37,9 +39,10 @@
 #include <vector>
 #include <fstream>
 // #include <codecvt>
-#include <algorithm> 
+#include <algorithm>
 #include <cctype>
 #include <locale>
+
 
 // #include <boost/algorithm/string/trim.hpp>
 
@@ -670,7 +673,7 @@ namespace Ambiesoft {
 					sum += (*pVector)[bi];
 				}
 			}
-			
+
 			if (!GetByte(sret[i], sret[i + 1], bu))
 				return false;
 
