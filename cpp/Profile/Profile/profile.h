@@ -37,6 +37,7 @@
 
 namespace Ambiesoft {
 	typedef void* HashIniHandle;
+	// typedef unsigned char byte;
 
 	static inline bool myisspace(char c)
 	{
@@ -531,6 +532,260 @@ namespace Ambiesoft {
             std::string sval = std::to_string(val);
             return WriteString(app, key, sval, inifile);
         }
+
+		static bool GetByte1(char c, unsigned char& b)
+		{
+			switch (c)
+			{
+			case '0': b = 0; return true;
+			case '1': b = 1; return true;
+			case '2': b = 2; return true;
+			case '3': b = 3; return true;
+			case '4': b = 4; return true;
+			case '5': b = 5; return true;
+			case '6': b = 6; return true;
+			case '7': b = 7; return true;
+			case '8': b = 8; return true;
+			case '9': b = 9; return true;
+			case 'a': b = 10; return true;
+			case 'A': b = 10; return true;
+			case 'b': b = 11; return true;
+			case 'B': b = 11; return true;
+			case 'c': b = 12; return true;
+			case 'C': b = 12; return true;
+			case 'd': b = 13; return true;
+			case 'D': b = 13; return true;
+			case 'e': b = 14; return true;
+			case 'E': b = 14; return true;
+			case 'f': b = 15; return true;
+			case 'F': b = 15; return true;
+			}
+			b = (unsigned char)'?';
+			return false;
+		}
+		static bool GetByte(char c1, char c2, unsigned char& b)
+		{
+			b = 0;
+			unsigned char b1, b2;
+			if (!GetByte1(c1, b1))
+				return false;
+			if (!GetByte1(c2, b2))
+				return false;
+
+			b = (unsigned char)((b1 << 4) | (unsigned char)b2);
+			return true;
+		}
+		
+		
+		// Binary starts -------------------
+		static bool GetBinary(
+			const std::string& app,
+			const std::string& key,
+			std::vector<unsigned char>& vRet,
+			HashIniHandle hih)
+		{
+			std::string sret;
+			if (!GetString(app, key, std::string(), sret, hih))
+				return false;
+
+			if(sret.empty())
+				return false;
+
+			if ((sret.size() % 2) != 0)
+				return false;
+
+			if (sret.size() == 2)
+			{
+				if (sret[0] == '0' && sret[1] == '0')
+				{
+					return true;
+				}
+				return false;
+			}
+
+			size_t length = (sret.size() / 2) - 1;
+			// byte[] ret = new byte[length];
+			vRet.resize(length);
+
+			int i = 0;
+			int bi = 0;
+			unsigned char sum = 0;
+			unsigned char bu;
+			int length2 = length * 2;
+			for (i = 0; i < length2; i += 2, ++bi)
+			{
+				if (!GetByte(sret[i], sret[i + 1], bu))
+					return false;
+
+				vRet[bi] = bu;
+				sum += vRet[bi];
+			}
+
+			if (!GetByte(sret[i], sret[i + 1], bu))
+				return false;
+
+			if (sum != bu)
+				return false;
+
+			return true;
+		}
+		static bool GetBinary(
+			const std::string& app,
+			const std::string& key,
+			std::vector<unsigned char>& vRet,
+			const std::string& inipath)
+		{
+			HashIniHandle hih = ReadAll(inipath);
+			return GetBinary(app, key, vRet, hih);
+		}
+
+		static char GetString1(unsigned char b)
+		{
+			switch (b)
+			{
+			case 0: return '0';
+			case 1: return '1';
+			case 2: return '2';
+			case 3: return '3';
+			case 4: return '4';
+			case 5: return '5';
+			case 6: return '6';
+			case 7: return '7';
+			case 8: return '8';
+			case 9: return '9';
+			case 10: return 'A';
+			case 11: return 'B';
+			case 12: return 'C';
+			case 13: return 'D';
+			case 14: return 'E';
+			case 15: return 'F';
+			}
+			return '?';
+		}
+		static void GetString(unsigned char b, char* sc2)
+		{
+			sc2[0] = GetString1((unsigned char)(b >> 4));
+			sc2[1] = GetString1((unsigned char)(b & 0x0F));
+		}
+		static bool WriteBinary(
+			const std::string& app,
+			const std::string& key,
+			const std::vector<unsigned char>& v,
+			HashIniHandle hih)
+		{
+			unsigned char sum = 0;
+
+			std::string sb; // = new StringBuilder((arent.Length * 2) + 2);
+			char sc2[2];
+			for(unsigned char b : v)
+			{
+				GetString(b, sc2);
+				sb.append(sc2, sc2+2);
+				sum += b;
+			}
+			GetString(sum, sc2);
+			sb.append(sc2, sc2+2);
+
+			return WriteString(app, key, sb, hih);
+		}
+		static bool WriteBinary(
+			const std::string& app,
+			const std::string& key,
+			const std::vector<unsigned char>& v,
+			const std::string& inipath)
+		{
+			// Mutex mutex = null;
+			//try
+			{
+				//mutex = createmutex(inipath);
+				//waitmutex(mutex);
+				HashIniHandle hih = ReadAll(inipath);
+				if (hih == nullptr)
+					return false;
+
+				if (!WriteBinary(app, key, v, hih))
+					return false;
+
+				return WriteAll(hih, inipath);
+			}
+			//finally
+			//{
+			//	if (mutex != null)
+			//	{
+			//		mutex.ReleaseMutex();
+			//	}
+			//}
+		}
+
+
+		// Bool starts----------
+		static bool iequals(const std::string& a, const std::string& b)
+		{
+			unsigned int sz = a.size();
+			if (b.size() != sz)
+				return false;
+			for (unsigned int i = 0; i < sz; ++i)
+				if (std::tolower(a[i]) != std::tolower(b[i]))
+					return false;
+			return true;
+		}
+		static bool GetBool(
+			const std::string& app,
+			const std::string& key,
+			bool def,
+			bool& ret,
+			const std::string& inipath)
+		{
+			HashIniHandle hih = ReadAll(inipath);
+			return GetBool(app, key, def, ret, hih);
+		}
+		static bool GetBool(
+			const std::string& app,
+			const std::string& key,
+			bool def,
+			bool& ret,
+			HashIniHandle hih)
+		{
+			ret = def;
+
+			std::string sret;
+			if (!GetString(app, key, std::string(), sret, hih))
+				return false;
+
+			if (sret.empty())
+				return false;
+
+			
+			if (iequals(sret, "yes") ||
+				iequals(sret, "on") ||
+				iequals(sret, "true"))
+			{
+				ret = true;
+				return true;
+			}
+
+			int iret = std::stoi(sret);
+			ret = iret == 1;
+			return true;
+		}
+
+		static bool WriteBool(
+			const std::string& app,
+			const std::string& key,
+			const bool val,
+			HashIniHandle hih)
+		{
+			// for compatibility, use int to write
+			return WriteInt(app, key, val ? 1 : 0, hih);
+		}
+		static bool WriteBool(
+			const std::string& app,
+			const std::string& key,
+			const bool val,
+			const std::string& inipath)
+		{
+			return WriteInt(app, key, val ? 1 : 0, inipath);
+		}
     };
 
 

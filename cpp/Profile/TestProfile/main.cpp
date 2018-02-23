@@ -22,6 +22,9 @@
 
 
 #include <cassert>
+#include <string>
+#include <vector>
+
 #ifdef _DEBUG
 #define VERIFY(s) assert(s)
 #else
@@ -79,6 +82,26 @@ void testdirect(const string& inifile)
 	int intval;
 	Profile::GetInt("MySection", "MyKey", 0, intval, inifile);
 	assert(intval == 666666);
+
+
+	vector<unsigned char> v = { 11,22,33 };
+	Profile::WriteBinary("MyBinarySection", "MyBinaryKey", v, inifile);
+	
+	vector<unsigned char> vout;
+	Profile::GetBinary("MyBinarySection", "MyBinaryKey", vout, inifile);
+
+	assert(v == vout);
+
+
+	// bool
+	bool b;
+	Profile::WriteBool("MBS", "MKB", true, inifile);
+	Profile::GetBool("MBS", "MKB", false, b, inifile);
+	assert(b == true);
+
+	Profile::WriteBool("MBS", "MKB", false, inifile);
+	Profile::GetBool("MBS", "MKB", true, b, inifile);
+	assert(!b);
 }
 
 bool file_exists(string file)
