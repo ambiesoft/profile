@@ -47,8 +47,11 @@ void testwrite(string filename)
 	VERIFY(Profile::WriteInt("mysection2", "mykey21", 212, ini));
 	VERIFY(Profile::WriteString("mysection2", "mykey22", u8"あああ", ini));
 
-	VERIFY(Profile::WriteAll(ini, filename));
 
+
+
+
+	VERIFY(Profile::WriteAll(ini, filename));
 	Profile::FreeHandle(ini);
 }
 void testread(string filename)
