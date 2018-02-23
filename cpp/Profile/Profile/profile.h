@@ -634,11 +634,11 @@ namespace Ambiesoft {
 			if(pVector)
 				pVector->resize(length);
 
-			int i = 0;
-			int bi = 0;
+			size_t i = 0;
+			size_t bi = 0;
 			unsigned char sum = 0;
 			unsigned char bu;
-			int length2 = length * 2;
+			size_t length2 = length * 2;
 
 			if (isNavive)
 			{
@@ -792,10 +792,10 @@ namespace Ambiesoft {
 		// Bool starts----------
 		static bool iequals(const std::string& a, const std::string& b)
 		{
-			unsigned int sz = a.size();
+			size_t sz = a.size();
 			if (b.size() != sz)
 				return false;
-			for (unsigned int i = 0; i < sz; ++i)
+			for (size_t i = 0; i < sz; ++i)
 				if (std::tolower(a[i]) != std::tolower(b[i]))
 					return false;
 			return true;
