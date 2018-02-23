@@ -24,8 +24,10 @@
 #define __MAIN_H__
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
-#if _MSC_VER <= 1800
+#ifdef _MSC_VER
+#if _MSC_VER <= 1900
 #pragma warning( disable : 4503 ) 
+#endif
 #endif
 #endif
 
