@@ -28,6 +28,8 @@
 #include <cstring>
 
 
+
+
 #ifdef _DEBUG
 #define VERIFY(s) assert(s)
 #else
@@ -51,8 +53,10 @@ void testwrite(string filename)
 	VERIFY(Profile::WriteInt("mysection", "mykey2", 21, ini));
 
 	VERIFY(Profile::WriteInt("mysection2", "mykey21", 212, ini));
-	VERIFY(Profile::WriteString("mysection2", "mykey22", u8"あああ", ini));
 
+#if _MSC_VER > 1800
+	VERIFY(Profile::WriteString("mysection2", "mykey22", u8"あああ", ini));
+#endif
 
 	vector<string> v = { "aaa","bbb" };
 	VERIFY(Profile::WriteStringArray("sa", "sak", v, ini));
@@ -73,8 +77,10 @@ void testread(string filename)
 	Profile::GetInt("mysection2", "mykey21", -1, intval, ini);
 	assert(intval == 212);
 
+#if _MSC_VER > 1800
 	Profile::GetString("mysection2", "mykey22", string(), sval, ini);
 	assert(sval == u8"あああ");
+#endif
 
 	vector<string> v;
 	Profile::GetStringArray("sa", "sak", v, ini);
@@ -114,7 +120,7 @@ void testdirect(const string& inifile)
 
 
 	// vector<string>
-	vector<string> vs = { "abc","xyz","tre",u8"あいいいいううううええええええええええええええ" };
+	vector<string> vs = { "abc","xyz","tre","faaaaaaae" };
 	Profile::WriteStringArray("vs", "vsk", vs, inifile);
 	vector<string> vsout;
 	Profile::GetStringArray("vs", "vsk", vsout, inifile);

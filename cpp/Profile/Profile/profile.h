@@ -23,6 +23,10 @@
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
+#if _MSC_VER <= 1800
+#pragma warning( disable : 4503 ) 
+#endif
+
 #include <map>
 #include <string>
 #include <memory>

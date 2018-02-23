@@ -1,4 +1,6 @@
-cli/Profile/Profile.2013.v12.suo
+*.suo
+*.sdf
+
 cli/Profile/Profile/bin/
 cli/Profile/Profile/obj/
 
@@ -7,8 +9,6 @@ cli/Profile/ProfileBasicTest/obj/
 
 
 cli/ProfileCompatTest/Debug/
-cli/ProfileCompatTest/ProfileTest.2013.sdf
-cli/ProfileCompatTest/ProfileTest.2013.v12.suo
 cli/ProfileCompatTest/ProfileTest/Debug/
 cli/ProfileCompatTest/ProfileTest/newfile1
 cli/ProfileCompatTest/ProfileTest/newfile2
