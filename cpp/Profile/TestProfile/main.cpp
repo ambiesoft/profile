@@ -58,7 +58,9 @@ void testwrite(string filename)
 	VERIFY(Profile::WriteString("mysection2", "mykey22", u8"あああ", ini));
 #endif
 
-	vector<string> v = { "aaa","bbb" };
+	vector<string> v;
+	v.push_back("aaa");
+	v.push_back("bbb");
 	VERIFY(Profile::WriteStringArray("sa", "sak", v, ini));
 
 	VERIFY(Profile::WriteAll(ini, filename));
@@ -99,7 +101,10 @@ void testdirect(const string& inifile)
 	assert(intval == 666666);
 
 
-	vector<unsigned char> v = { 11,22,33 };
+	vector<unsigned char> v;
+	v.push_back(11);
+	v.push_back(22);
+	v.push_back(33);
 	Profile::WriteBinary("MyBinarySection", "MyBinaryKey", v, inifile);
 
 	vector<unsigned char> vout;
@@ -120,7 +125,11 @@ void testdirect(const string& inifile)
 
 
 	// vector<string>
-	vector<string> vs = { "abc","xyz","tre","faaaaaaae" };
+	vector<string> vs;
+	vs.push_back("abc");
+	vs.push_back("xyz");
+	vs.push_back("tre");
+	vs.push_back("faaaaaaae" );
 	Profile::WriteStringArray("vs", "vsk", vs, inifile);
 	vector<string> vsout;
 	Profile::GetStringArray("vs", "vsk", vsout, inifile);
