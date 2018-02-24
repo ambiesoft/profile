@@ -148,7 +148,7 @@ namespace Ambiesoft {
 	public:
 		static HashIniHandle CreateEmptyInstanceForSpecialUse()
 		{
-			return static_cast<HashIni*>(new HashIni());
+			return static_cast<HashIniHandle>(new HashIni());
 		}
 
 		friend Profile;
@@ -339,13 +339,13 @@ namespace Ambiesoft {
 					{
 						std::string keyname = its->first;
 						std::vector<std::string>& arent = its->second;
-						for (std::string& val : arent)
+						for (std::vector<std::string>::const_iterator it = arent.begin() ; it != arent.end(); ++it)
 						{
-							if (!val.empty())
+							if (!it->empty())
 							{
 								ofs << keyname;
 								ofs << "=";
-								ofs << val;
+								ofs << *it;
 								ofs << std::endl;
 							}
 						}
@@ -532,7 +532,7 @@ namespace Ambiesoft {
 			int val,
 			HashIniHandle hih)
 		{
-			std::string sval = std::to_string(val);
+			std::string sval = std::to_string(static_cast<long long>(val));
 			return WriteString(app, key, sval, hih);
 		}
 		static bool WriteInt(const std::string& app,
@@ -540,7 +540,7 @@ namespace Ambiesoft {
 			int val,
 			const std::string& inifile)
 		{
-			std::string sval = std::to_string(val);
+			std::string sval = std::to_string(static_cast<long long>(val));
 			return WriteString(app, key, sval, inifile);
 		}
 

@@ -1,6 +1,7 @@
 *.VC.db
 *.suo
 *.sdf
+*.user
 
 cli/Profile/Profile/bin/
 cli/Profile/Profile/obj/
