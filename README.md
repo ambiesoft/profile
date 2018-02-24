@@ -13,7 +13,7 @@ Profile.GetInt("sec", "aaa", 0, out i, inipath);
 ```
 
 ### C++
-Include *Profile.h*.
+Include *Profile.h* (resides in cpp/Profile/Profile/).
 
 code example:
 ```cpp
