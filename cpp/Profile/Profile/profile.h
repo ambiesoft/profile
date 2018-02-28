@@ -63,11 +63,16 @@ namespace Ambiesoft {
 	}
 
 	// trim from end (in place)
-	static inline void rtrim(std::string &s) {
-		s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
-			return !myisspace(ch);
-		}).base(), s.end());
-	}
+    static inline void rtrim(std::string &s) {
+        s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+            return !myisspace(ch);
+        }).base(), s.end());
+    }
+    static inline void rtrimr(std::string &s) {
+        s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+            return !(ch=='\r');
+        }).base(), s.end());
+    }
 
 	// trim from both ends (in place)
 	static inline void trim(std::string &s) {
@@ -245,6 +250,8 @@ namespace Ambiesoft {
 					while (getline(ifs, line))
 					{
 						ltrim(line); // boost::algorithm::trim_left(line);
+                        rtrimr(line);
+
 						if (line.empty() || line[0] == '#')
 							continue;
 
