@@ -80,8 +80,8 @@ void testread(string filename)
 	assert(intval == 212);
 
 #if _MSC_VER > 1800
-	Profile::GetString("mysection2", "mykey22", string(), sval, ini);
-	assert(sval == u8"あああ");
+	//Profile::GetString("mysection2", "mykey22", string(), sval, ini);
+	//assert(sval == u8"あああ");
 #endif
 
 	vector<string> v;
