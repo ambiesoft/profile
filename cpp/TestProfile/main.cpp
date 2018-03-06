@@ -159,7 +159,7 @@ void testdirect(const string& inifile)
 			b = 1234555;
 			c = 33;
 
-            for(size_t i=0 ; i < _countof(random); ++i)
+            for(size_t i=0 ; i < (sizeof(random)/sizeof(random[0])); ++i)
             {
                 random[i] = rand();
             }
