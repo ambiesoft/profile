@@ -12,4 +12,5 @@ SOURCES += \
     TestProfile/main.cpp
 
 HEADERS += \
-    Profile/profile.h
+    Profile/include/profile.h
+

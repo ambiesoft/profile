@@ -1,29 +1,6 @@
-*.VC.db
-*.suo
-*.sdf
+
+# QtCreator's built files
+build-*/
+
+# Many ides create this user specific file
 *.user
-
-cli/Profile/Profile/bin/
-cli/Profile/Profile/obj/
-
-cli/Profile/ProfileBasicTest/bin/
-cli/Profile/ProfileBasicTest/obj/
-
-
-cli/ProfileCompatTest/Debug/
-cli/ProfileCompatTest/ProfileTest/Debug/
-cli/ProfileCompatTest/ProfileTest/newfile1
-cli/ProfileCompatTest/ProfileTest/newfile2
-cli/ProfileCompatTest/ProfileTest/still.wini
-cli/ProfileCompatTest/ipch/
-
-
-cpp/Profile/.vs/
-cpp/Profile/Profile/Win32/
-cpp/Profile/Profile/obj/
-cpp/Profile/Profile/x64/
-cpp/Profile/TestProfile/Win32/
-cpp/Profile/TestProfile/obj/
-cpp/Profile/build/
-cpp/Profile/x64/
-

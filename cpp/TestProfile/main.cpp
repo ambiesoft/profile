@@ -36,7 +36,7 @@
 #define VERIFY(s) s;
 #endif
 
-#include "../Profile/profile.h"
+#include "profile/include/profile.h"
 
 
 using namespace std;
