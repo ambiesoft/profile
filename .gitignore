@@ -10,4 +10,10 @@ build-*/
 cpp/TestProfile/obj/
 cpp/build/
 
+# Visual Studio files
+cpp/TestProfile/.vs/
+cpp/TestProfile/Debug/
+cpp/TestProfile/x64/
 
+# created in test
+cpp/TestProfile/TestProfile.ini

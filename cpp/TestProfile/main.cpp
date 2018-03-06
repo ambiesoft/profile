@@ -66,7 +66,7 @@ void testwrite(string filename)
 	VERIFY(Profile::WriteAll(ini, filename));
 	Profile::FreeHandle(ini);
 }
-void testread(string filename)
+void testread(const string& filename)
 {
 	HashIniHandle ini = Profile::ReadAll(filename, false);
 
