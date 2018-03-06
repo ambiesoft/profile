@@ -136,12 +136,16 @@ void testdirect(const string& inifile)
 	assert(vs == vsout);
 
 
+    srand(static_cast<unsigned int>(time(NULL)));
+
 	// binay
 	struct TestS
 	{
 		int a;
 		int b;
 		char c;
+
+        int random[100];
 
 		TestS()
 		{
@@ -154,6 +158,11 @@ void testdirect(const string& inifile)
 			a = 111;
 			b = 1234555;
 			c = 33;
+
+            for(size_t i=0 ; i < _countof(random); ++i)
+            {
+                random[i] = rand();
+            }
 		}
 	};
 
