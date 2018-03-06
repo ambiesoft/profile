@@ -37,7 +37,6 @@
 			<Add option="-fexceptions" />
 			<Add directory="../Profile/include" />
 		</Compiler>
-		<Unit filename="../Profile/include/profile.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

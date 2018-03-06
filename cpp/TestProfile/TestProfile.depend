@@ -18,15 +18,25 @@
 	<map>
 	<string>
 
-1520302383 source:c:\local\msys2\home\kineko\gitdev\profile\cpp\testprofile\main.cpp
+1520302765 source:c:\local\msys2\home\kineko\gitdev\profile\cpp\testprofile\main.cpp
 	<cassert>
 	<string>
 	<vector>
 	<memory>
 	<cstring>
-	<profile.h>
+	<ambiesoft.profile.h>
 
 1519835835 c:\local\msys2\home\kineko\gitdev\profile\cpp\profile\include\profile.h
+	<map>
+	<string>
+	<memory>
+	<vector>
+	<fstream>
+	<algorithm>
+	<cctype>
+	<locale>
+
+1520302823 c:\local\msys2\home\kineko\gitdev\profile\cpp\profile\include\ambiesoft.profile.h
 	<map>
 	<string>
 	<memory>

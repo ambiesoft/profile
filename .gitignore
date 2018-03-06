@@ -4,3 +4,10 @@ build-*/
 
 # Many ides create this user specific file
 *.user
+
+
+# Code::Blocks files
+cpp/TestProfile/obj/
+cpp/build/
+
+
