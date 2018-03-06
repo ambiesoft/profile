@@ -36,7 +36,7 @@
 #define VERIFY(s) s;
 #endif
 
-#include "profile/include/profile.h"
+#include <ambiesoft.profile.h>
 
 
 using namespace std;
