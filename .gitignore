@@ -9,6 +9,8 @@ build-*/
 # Code::Blocks files
 cpp/TestProfile/obj/
 cpp/build/
+cpp/TestProfile/TestProfile.depend
+cpp/TestProfile/TestProfile.layout
 
 # Visual Studio files
 cpp/TestProfile/.vs/
