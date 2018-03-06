@@ -13,7 +13,7 @@ Profile.GetInt("sec", "aaa", 0, out i, inipath);
 ```
 
 ### C++
-Include *Profile.h* (resides in cpp/Profile/Profile/).
+Include *Profile.h* (resides in cpp/Profile/include/).
 
 code example:
 ```cpp
@@ -30,7 +30,7 @@ assert(intval == 666666);
 ```
 
 ## Character Code
-Ini File will be loaded and saved with UTF8. 
+Ini-file will be loaded and saved with UTF8. 
 
 ## Benefit
 - Easy to use
