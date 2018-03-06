@@ -13,11 +13,11 @@ Profile.GetInt("sec", "aaa", 0, out i, inipath);
 ```
 
 ### C++
-Include *Profile.h* (resides in cpp/Profile/include/).
+Include *ambiesoft.profile.h* (resides in cpp/Profile/include/).
 
 code example:
 ```cpp
-#include "dir/Profile.h"
+#include <ambiesoft.profile.h>
 using namespace Ambiesoft;
 
 string filename = "TestProfile.ini";
