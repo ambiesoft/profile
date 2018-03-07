@@ -38,7 +38,7 @@
 #include <memory>
 #include <vector>
 #include <fstream>
-// #include <codecvt>
+#include <codecvt>
 #include <algorithm>
 #include <cctype>
 #include <locale>
@@ -228,7 +228,7 @@ namespace Ambiesoft {
 				// static_assert(sizeof(char) == 2, "error.");//Linux is no ready
 				// fs.imbue(std::locale(std::locale(""), new std::codecvt_utf8_utf16<char, 0x10ffff, std::consume_header>()));
 				// fs.imbue(std::locale(std::locale(""), new std::codecvt_utf8_utf16<char, 0x10ffff, std::consume_header>()));
-				ifs.imbue(std::locale(""));
+				ifs.imbue(std::locale::classic());
 
 				// skip UTF-8 BOM
 				{
@@ -323,7 +323,7 @@ namespace Ambiesoft {
 					throw std::exception();
 
 				// ofs.imbue({ {}, new std::codecvt_utf8<char, 0x10FFFF, std::consume_header> });
-				ofs.imbue(std::locale(""));
+				ofs.imbue(std::locale::classic());
 
 
 
@@ -417,7 +417,7 @@ namespace Ambiesoft {
 			const std::string& key,
 			const std::string& def,
 			std::string& ret,
-			std::string& inifile)
+			const std::string& inifile)
 		{
 			HashIniHandleWrapper ini(ReadAll(inifile));
 			return GetString(app, key, def, ret, ini);
@@ -950,6 +950,66 @@ namespace Ambiesoft {
 			(*sec)[key] = vs;
 			return true;
 		}
+
+#if 0 // char convertion is diffcult in various platform
+		// wstring starts ---------------------
+
+		
+		static bool GetString(const std::string& app,
+			const std::string& key,
+			const std::wstring& def,
+			std::wstring& ret,
+			HashIniHandle hih)
+		{
+			HashIni* hi = static_cast<HashIni*>(hih);
+			ret = def;
+
+			std::string sret;
+			if (!GetString(app, key, std::string(), sret, hi))
+				return false;
+
+			ret = utf8_to_wstring(sret);
+			return true;
+		}
+		static bool GetString(const std::string& app,
+			const std::string& key,
+			const std::wstring& def,
+			std::wstring& ret,
+			const std::string& inifile)
+		{
+			HashIniHandleWrapper ini(ReadAll(inifile));
+			return GetString(app, key, def, ret, ini);
+		}
+		static bool WriteString(const std::string& app,
+			const std::string& key,
+			const std::wstring& val,
+			HashIniHandle hih)
+		{
+			return WriteString(app, key, wstring_to_utf8(val), hih);
+		}
+		static bool WriteString(const std::string& app,
+			const std::string& key,
+			const std::wstring& val,
+			const std::string& inifile)
+		{
+			return WriteString(app, key, wstring_to_utf8(val), inifile);
+		}
+
+		// convert UTF-8 string to wstring
+		// https://stackoverflow.com/a/12903901
+		static std::wstring utf8_to_wstring(const std::string& str)
+		{
+                        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> myconv;
+                        return myconv.from_bytes(str);
+		}
+
+		// convert wstring to UTF-8 string
+		static std::string wstring_to_utf8(const std::wstring& str)
+		{
+                        std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> myconv;
+                        return myconv.to_bytes(str);
+		}
+#endif // wchar convertion
 	};
 
 

@@ -174,6 +174,12 @@ void testdirect(const string& inifile)
 	Profile::GetBinary("ba", "bskey", (unsigned char*)&tsout, inifile);
 
 	assert(memcmp(&ts, &tsout, sizeof(ts)) == 0);
+
+//	const wchar_t* pU = L"ユーティーエフ１６斷言、宣稱、主張、聲明어서션(assertion) 또는";
+//	Profile::WriteString("UTF16APP", "UTF16KEY", pU, inifile);
+//	std::wstring ws;
+//	Profile::GetString("UTF16APP", "UTF16KEY", L"", ws, inifile);
+//	assert(ws == pU);
 }
 
 bool file_exists(string file)
