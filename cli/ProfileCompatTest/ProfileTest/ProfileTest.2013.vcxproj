@@ -122,6 +122,9 @@
     <None Include="Test.wini4" />
     <None Include="Test.wini5" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="currentout.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

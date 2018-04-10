@@ -37,4 +37,7 @@
     <None Include="Test.wini5" />
     <None Include="Test.SectionFormat.wini" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="currentout.txt" />
+  </ItemGroup>
 </Project>

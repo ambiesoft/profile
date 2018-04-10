@@ -1,0 +1,7 @@
+int failed:sec=SEC, key=e, file=C:\Cygwin\home\fjUnc\gitdev\profile\cli\ProfileCompatTest\ProfileTest\Test.wini4 (300 != 0
+EEEEEEEEEEEEEEEEEEEEEEE11111111111111111
+int failed:sec=SEC, key=h, file=C:\Cygwin\home\fjUnc\gitdev\profile\cli\ProfileCompatTest\ProfileTest\Test.wini4 (255 != 0
+EEEEEEEEEEEEEEEEEEEEEEE11111111111111111
+EEEEEEEEEEEEEEEEEEEEEEE11111111111111111
+Press any key to continue . . .
+
