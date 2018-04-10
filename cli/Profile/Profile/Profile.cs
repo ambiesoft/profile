@@ -41,14 +41,14 @@ namespace Ambiesoft
             if (sout.Length == 0)
                 return sout;
 
-            if (sout[0] == '\'')
+            if (sout[0] == '\'' && sout.Length > 1)
             {
                 if (sout.EndsWith("\'"))
                 {
                     sout = sout.Substring(1, sout.Length - 2);
                 }
             }
-            else if (sout[0] == '\"')
+            else if (sout[0] == '\"' && sout.Length > 1)
             {
                 if (sout.EndsWith("\""))
                 {

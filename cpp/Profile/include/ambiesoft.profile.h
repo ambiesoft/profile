@@ -114,14 +114,14 @@ namespace Ambiesoft {
 		if (sout.empty())
 			return sout;
 
-		if (sout[0] == '\'')
+		if (sout[0] == '\'' && sout.size() > 1)
 		{
 			if (ends_with(sout, "\'"))
 			{
 				sout = sout.substr(1, sout.size() - 2);// Substring(1, sout.Length - 2);
 			}
 		}
-		else if (sout[0] == '\"')
+		else if (sout[0] == '\"' && sout.size() > 1)
 		{
 			if (ends_with(sout, "\""))
 			{

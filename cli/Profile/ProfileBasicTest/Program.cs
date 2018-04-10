@@ -35,6 +35,10 @@ namespace ProfileCheck
             string inipath = Application.ExecutablePath + ".ini";
             int i;
             string ss;
+
+            Profile.WriteString("quote", "quote", "\"", inipath);
+            Profile.GetString("quote", "quote", "", out ss, inipath);
+            
             Profile.GetString("aaa", "aaa", "", out ss, inipath);
             Profile.WriteInt("aaa", "aaa", 12345, inipath);
             Profile.GetInt("aaa", "aaa", 0, out i, inipath);

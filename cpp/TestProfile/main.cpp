@@ -180,6 +180,11 @@ void testdirect(const string& inifile)
 //	std::wstring ws;
 //	Profile::GetString("UTF16APP", "UTF16KEY", L"", ws, inifile);
 //	assert(ws == pU);
+
+	string ss;
+	Profile::WriteString("quote", "quote", "\"", inifile);
+	Profile::GetString("quote", "quote", "", ss, inifile);
+	assert(ss == "\"");
 }
 
 bool file_exists(string file)
