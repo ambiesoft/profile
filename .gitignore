@@ -19,3 +19,11 @@ cpp/TestProfile/x64/
 
 # created in test
 cpp/TestProfile/TestProfile.ini
+
+
+cli/Profile/Profile.2013.v12.suo
+cli/Profile/Profile/bin/
+cli/Profile/Profile/obj/
+cli/Profile/ProfileBasicTest/bin/
+cli/Profile/ProfileBasicTest/obj/
+
