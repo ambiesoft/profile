@@ -27,3 +27,9 @@ cli/Profile/Profile/obj/
 cli/Profile/ProfileBasicTest/bin/
 cli/Profile/ProfileBasicTest/obj/
 
+cli/ProfileCompatTest/Debug/
+cli/ProfileCompatTest/ProfileTest.2013.sdf
+cli/ProfileCompatTest/ProfileTest.2013.v12.suo
+cli/ProfileCompatTest/ProfileTest/Debug/
+cli/ProfileCompatTest/ipch/
+
