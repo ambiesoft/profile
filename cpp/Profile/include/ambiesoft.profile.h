@@ -20,8 +20,8 @@
 //OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //SOFTWARE.
 
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#ifndef __AMBIESOFT_PROFILE_H__
+#define __AMBIESOFT_PROFILE_H__
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
 #ifdef _MSC_VER
@@ -42,13 +42,28 @@
 #include <algorithm>
 #include <cctype>
 #include <locale>
-
+#include <codecvt>
 
 // #include <boost/algorithm/string/trim.hpp>
 
 namespace Ambiesoft {
 	typedef void* HashIniHandle;
 	// typedef unsigned char byte;
+
+	// https://stackoverflow.com/a/12903901
+	// convert UTF-8 string to wstring
+	static inline std::wstring utf8_to_wstring(const std::string& str)
+	{
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+		return myconv.from_bytes(str);
+	}
+
+	// convert wstring to UTF-8 string
+	static inline std::string wstring_to_utf8(const std::wstring& str)
+	{
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+		return myconv.to_bytes(str);
+	}
 
 	static inline bool myisspace(char c)
 	{
@@ -498,7 +513,8 @@ namespace Ambiesoft {
 
 
 		// Int starts ----------------
-		static bool GetInt(const std::string& app,
+		static bool GetInt(
+			const std::string& app,
 			const std::string& key,
 			int def,
 			int& ret,
@@ -525,7 +541,8 @@ namespace Ambiesoft {
 
 			return true;
 		}
-		static bool GetInt(const std::string& app,
+		static bool GetInt(
+			const std::string& app,
 			const std::string& key,
 			int def,
 			int& ret,
@@ -534,7 +551,8 @@ namespace Ambiesoft {
 			HashIniHandleWrapper ini(ReadAll(inifile));
 			return GetInt(app, key, def, ret, ini);
 		}
-		static bool WriteInt(const std::string& app,
+		static bool WriteInt(
+			const std::string& app,
 			const std::string& key,
 			int val,
 			HashIniHandle hih)
@@ -542,7 +560,9 @@ namespace Ambiesoft {
 			std::string sval = std::to_string(static_cast<long long>(val));
 			return WriteString(app, key, sval, hih);
 		}
-		static bool WriteInt(const std::string& app,
+
+		static bool WriteInt(
+			const std::string& app,
 			const std::string& key,
 			int val,
 			const std::string& inifile)
@@ -550,6 +570,21 @@ namespace Ambiesoft {
 			std::string sval = std::to_string(static_cast<long long>(val));
 			return WriteString(app, key, sval, inifile);
 		}
+
+		// must use templates
+		//static bool WriteInt(
+		//	const std::wstring& appw,
+		//	const std::wstring& keyw,
+		//	int val,
+		//	const std::wstring& inifilew)
+		//{
+		//	std::string app = wstring_to_utf8(appw);
+		//	std::string key = wstring_to_utf8(keyw);
+		//	std::string inifile = wstring_to_utf8(inifilew);
+
+		//	std::string sval = std::to_string(static_cast<long long>(val));
+		//	return WriteString(app, key, sval, inifile);
+		//}
 
 		static bool GetByte1(char c, unsigned char& b)
 		{
@@ -1017,4 +1052,4 @@ namespace Ambiesoft {
 
 
 
-#endif // __MAIN_H__
+#endif // __AMBIESOFT_PROFILE_H__
