@@ -34,3 +34,10 @@ cli/ProfileCompatTest/ProfileTest.2013.v12.suo
 cli/ProfileCompatTest/ProfileTest/Debug/
 cli/ProfileCompatTest/ipch/
 
+
+cpp/GTestProfile/.vs/
+cpp/GTestProfile/Debug/
+cpp/GTestProfile/Release/
+cpp/GTestProfile/inifile.ini
+cpp/GTestProfile/x64/
+
