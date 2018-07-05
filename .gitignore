@@ -15,6 +15,7 @@ cpp/TestProfile/TestProfile.layout
 # Visual Studio files
 cpp/TestProfile/.vs/
 cpp/TestProfile/Debug/
+cpp/TestProfile/Release/
 cpp/TestProfile/x64/
 
 # created in test

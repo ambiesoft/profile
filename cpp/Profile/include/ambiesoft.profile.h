@@ -71,7 +71,7 @@ namespace Ambiesoft {
 	{
 	public:
 		explicit file_not_found_error(const std::string& message)
-			: error_base(message.c_str()) {}
+			: error_base(message) {}
 		explicit file_not_found_error(const char *message)
 			: error_base(message) {}
 	};
@@ -79,7 +79,7 @@ namespace Ambiesoft {
 	{
 	public:
 		explicit file_not_opened_error(const std::string& message)
-			: error_base(message.c_str()) {}
+			: error_base(message) {}
 		explicit file_not_opened_error(const char *message)
 			: error_base(message) {}
 	};
@@ -348,6 +348,16 @@ namespace Ambiesoft {
 					}
 				}
 				return hi;
+			}
+			catch (file_not_found_error& e)
+			{
+				if (throwexception)
+					throw e;
+			}
+			catch (file_not_opened_error& e)
+			{
+				if (throwexception)
+					throw e;
 			}
 			catch (std::exception& e)
 			{
