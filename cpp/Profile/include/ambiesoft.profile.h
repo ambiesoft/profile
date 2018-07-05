@@ -32,6 +32,7 @@
 #endif
 
 
+#include <sys/stat.h>
 
 #include <map>
 #include <string>
@@ -47,21 +48,40 @@
 // #include <boost/algorithm/string/trim.hpp>
 
 namespace Ambiesoft {
-	class file_not_found_error : public std::exception
+	class error_base : public std::exception
+	{
+		std::string message_;
+	public:
+		explicit error_base(const std::string& message)
+			: message_(message){}
+		explicit error_base(const char *message)
+			: message_(message){}
+
+		virtual ~error_base(){}
+
+		virtual const char* what() const
+#ifdef __MINGW32__
+		_GLIBCXX_USE_NOEXCEPT
+#endif
+		{
+			return message_.c_str();
+		}
+	};
+	class file_not_found_error : public error_base
 	{
 	public:
 		explicit file_not_found_error(const std::string& message)
-			: std::exception(message.c_str()) {}
+			: error_base(message.c_str()) {}
 		explicit file_not_found_error(const char *message)
-			: std::exception(message) {}
+			: error_base(message) {}
 	};
-	class file_not_opened_error : public std::exception
+	class file_not_opened_error : public error_base
 	{
 	public:
 		explicit file_not_opened_error(const std::string& message)
-			: std::exception(message.c_str()) {}
+			: error_base(message.c_str()) {}
 		explicit file_not_opened_error(const char *message)
-			: std::exception(message) {}
+			: error_base(message) {}
 	};
 
 	typedef void* HashIniHandle;
