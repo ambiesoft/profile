@@ -47,6 +47,23 @@
 // #include <boost/algorithm/string/trim.hpp>
 
 namespace Ambiesoft {
+	class file_not_found_error : public std::exception
+	{
+	public:
+		explicit file_not_found_error(const std::string& message)
+			: std::exception(message.c_str()) {}
+		explicit file_not_found_error(const char *message)
+			: std::exception(message) {}
+	};
+	class file_not_opened_error : public std::exception
+	{
+	public:
+		explicit file_not_opened_error(const std::string& message)
+			: std::exception(message.c_str()) {}
+		explicit file_not_opened_error(const char *message)
+			: std::exception(message) {}
+	};
+
 	typedef void* HashIniHandle;
 	// typedef unsigned char byte;
 
@@ -235,10 +252,15 @@ namespace Ambiesoft {
 				//mutex = createmutex(inipath);
 				//waitmutex(mutex);
 
+
+				struct stat tmpstat;
+				if (stat (file.c_str(), &tmpstat) != 0)
+					throw file_not_found_error(file);
+
 				std::ifstream ifs;
 				ifs.open(file);
 				if (!ifs)
-					throw std::exception();
+					throw file_not_opened_error(file);
 
 				// static_assert(sizeof(char) == 2, "error.");//Linux is no ready
 				// fs.imbue(std::locale(std::locale(""), new std::codecvt_utf8_utf16<char, 0x10ffff, std::consume_header>()));
@@ -335,7 +357,7 @@ namespace Ambiesoft {
 				std::ofstream ofs;
 				ofs.open(inipath);
 				if (!ofs)
-					throw std::exception();
+					throw file_not_opened_error(inipath);
 
 				// ofs.imbue({ {}, new std::codecvt_utf8<char, 0x10FFFF, std::consume_header> });
 				ofs.imbue(std::locale::classic());
