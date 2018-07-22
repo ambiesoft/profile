@@ -11,3 +11,6 @@ SOURCES += \
 INCLUDEPATH += \
 	../googletest/googletest \
 	../googletest/googletest/include
+
+HEADERS += \
+    ../Profile/include/ambiesoft.profile.h

@@ -43,7 +43,8 @@ using namespace std;
 
 using namespace Ambiesoft;
 
-void testwrite(string filename)
+template<class C>
+void testwrite(std::basic_string<C, std::char_traits<C>, std::allocator<C>> filename)
 {
 	HashIniHandle ini = Profile::ReadAll(filename, false);
 
@@ -51,7 +52,6 @@ void testwrite(string filename)
 	VERIFY(Profile::WriteInt("mysection", "mykey", 54321, ini));
 
 	VERIFY(Profile::WriteInt("mysection", "mykey2", 21, ini));
-
 	VERIFY(Profile::WriteInt("mysection2", "mykey21", 212, ini));
 
 #if _MSC_VER > 1800
@@ -92,7 +92,9 @@ void testread(const string& filename)
 
 	Profile::FreeHandle(ini);
 }
-void testdirect(const string& inifile)
+
+template<class C>
+void testdirect(const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
 {
 	Profile::WriteInt("MySection", "MyKey", 666666, inifile);
 
@@ -187,20 +189,24 @@ void testdirect(const string& inifile)
 	assert(ss == "\"");
 }
 
-bool file_exists(string file)
+template<class C>
+bool file_exists(std::basic_string<C, std::char_traits<C>, std::allocator<C>> file)
 {
 	ifstream my_file(file);
 	return my_file.good();
 }
 int main()
 {
-	string filename = "TestProfile.ini";
-	if (file_exists(filename))
-		testread(filename);
+    {
+        string filename = "TestProfile.ini";
+        if (file_exists(filename))
+            testread(filename);
 
-	testwrite(filename);
-	testread(filename);
+        testwrite(filename);
+        testread(filename);
 
-	testdirect(filename);
+        testdirect(filename);
+    }
+
 	return 0;
 }

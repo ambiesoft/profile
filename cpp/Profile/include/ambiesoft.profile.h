@@ -232,7 +232,7 @@ namespace Ambiesoft {
 			}
 		};
 
-	public:
+    private:
 		static std::pair<std::string, std::string> splitLine(const std::string& line)
 		{
 			size_t pos = line.find('=', 0);
@@ -260,8 +260,69 @@ namespace Ambiesoft {
 			}
 			return ret;
 		}
+        static bool GetByte1(char c, unsigned char& b)
+        {
+            switch (c)
+            {
+            case '0': b = 0; return true;
+            case '1': b = 1; return true;
+            case '2': b = 2; return true;
+            case '3': b = 3; return true;
+            case '4': b = 4; return true;
+            case '5': b = 5; return true;
+            case '6': b = 6; return true;
+            case '7': b = 7; return true;
+            case '8': b = 8; return true;
+            case '9': b = 9; return true;
+            case 'a': b = 10; return true;
+            case 'A': b = 10; return true;
+            case 'b': b = 11; return true;
+            case 'B': b = 11; return true;
+            case 'c': b = 12; return true;
+            case 'C': b = 12; return true;
+            case 'd': b = 13; return true;
+            case 'D': b = 13; return true;
+            case 'e': b = 14; return true;
+            case 'E': b = 14; return true;
+            case 'f': b = 15; return true;
+            case 'F': b = 15; return true;
+            }
+            b = (unsigned char)'?';
+            return false;
+        }
+        static bool GetByte(char c1, char c2, unsigned char& b)
+        {
+            b = 0;
+            unsigned char b1, b2;
+            if (!GetByte1(c1, b1))
+                return false;
+            if (!GetByte1(c2, b2))
+                return false;
 
-		static HashIniHandle ReadAll(const std::string& file, bool throwexception = false)
+            b = (unsigned char)((b1 << 4) | (unsigned char)b2);
+            return true;
+        }
+
+		static int tstat(const char* fileName, struct _stat* const sstat)
+		{
+			return _stat(fileName, sstat);
+		}
+		static int tstat(const wchar_t* fileName, struct _stat* const sstat)
+		{
+			return _wstat(fileName, sstat);
+		}
+	public:
+        static HashIniHandle ReadAll(const char* pFile,
+                                     bool throwexception = false)
+        {
+            return ReadAll(std::string(pFile), throwexception);
+        }
+
+
+
+		template<class C>
+		static HashIniHandle ReadAll(const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& file,
+									 bool throwexception = false)
 		{
 			HashIni* hi = static_cast<HashIni*>(HashIni::CreateEmptyInstanceForSpecialUse());
 			HashIni::HashAll& al = hi->Hash();
@@ -273,14 +334,18 @@ namespace Ambiesoft {
 				//waitmutex(mutex);
 
 
-				struct stat tmpstat;
-				if (stat (file.c_str(), &tmpstat) != 0)
-					throw file_not_found_error(file);
+				struct _stat tmpstat;
+				if (tstat(file.c_str(), &tmpstat) != 0)
+					throw file_not_found_error(std::string()); // TODO: pass filename
 
-				std::ifstream ifs;
+
+                std::ifstream ifs;
+
+                // Only windows support open(wchar*)
+                // Todo: How to do it in other platform?
 				ifs.open(file);
 				if (!ifs)
-					throw file_not_opened_error(file);
+					throw file_not_opened_error(std::string()); // TODO: pass filename
 
 				// static_assert(sizeof(char) == 2, "error.");//Linux is no ready
 				// fs.imbue(std::locale(std::locale(""), new std::codecvt_utf8_utf16<char, 0x10ffff, std::consume_header>()));
@@ -366,11 +431,18 @@ namespace Ambiesoft {
 			}
 			return (HashIniHandle)hi;
 		}
-		static bool WriteAll(HashIniHandle hih, const std::string& inipath)
+
+		template<class C>
+		static bool WriteAll(HashIniHandle hih,
+							 const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
 			return WriteAll(hih, inipath, false);
 		}
-		static bool WriteAll(HashIniHandle hih, const std::string& inipath, bool throwexception)
+
+		template<class C>
+		static bool WriteAll(HashIniHandle hih,
+							 const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath,
+							 bool throwexception)
 		{
 			HashIni* hi = static_cast<HashIni*>(hih);
 			if (hi == nullptr)
@@ -387,7 +459,7 @@ namespace Ambiesoft {
 				std::ofstream ofs;
 				ofs.open(inipath);
 				if (!ofs)
-					throw file_not_opened_error(inipath);
+					throw file_not_opened_error(std::string());  // TODO: pass filename (inipath);
 
 				// ofs.imbue({ {}, new std::codecvt_utf8<char, 0x10FFFF, std::consume_header> });
 				ofs.imbue(std::locale::classic());
@@ -480,15 +552,20 @@ namespace Ambiesoft {
 			ret = arent[0];
 			return true;
 		}
+
+		template<class C>
 		static bool GetString(const std::string& app,
 			const std::string& key,
 			const std::string& def,
-			std::string& ret,
+			std::basic_string<C, std::char_traits<C>, std::allocator<C>>& ret,
 			const std::string& inifile)
 		{
 			HashIniHandleWrapper ini(ReadAll(inifile));
 			return GetString(app, key, def, ret, ini);
 		}
+
+
+
 		static bool WriteString(const std::string& app,
 			const std::string& key,
 			const char* val,
@@ -539,10 +616,18 @@ namespace Ambiesoft {
 		{
 			return WriteString(app, key, val.c_str(), hih);
 		}
+        static bool WriteString(const std::string& app,
+            const std::string& key,
+            const std::string& val,
+            const char* pIniFile)
+        {
+            return WriteString(app,key,val,std::string(pIniFile));
+        }
+		template<class C>
 		static bool WriteString(const std::string& app,
 			const std::string& key,
 			const std::string& val,
-			const std::string& inifile)
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
 		{
 			// Mutex mutex = null;
 			try
@@ -598,11 +683,33 @@ namespace Ambiesoft {
 			const std::string& key,
 			int def,
 			int& ret,
-			const std::string& inifile)
+			const char* pIniFile)
 		{
-			HashIniHandleWrapper ini(ReadAll(inifile));
-			return GetInt(app, key, def, ret, ini);
+			return GetInt(app, key, def, ret, std::string(pIniFile));
 		}
+		static bool GetInt(
+			const std::string& app,
+			const std::string& key,
+			int def,
+			int& ret,
+			const wchar_t* pIniFile)
+		{
+			return GetInt(app, key, def, ret, std::wstring(pIniFile));
+		}
+		template<class C>
+        static bool GetInt(
+            const std::string& app,
+            const std::string& key,
+            int def,
+            int& ret,
+            const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
+        {
+            HashIniHandleWrapper ini(ReadAll(inifile));
+            return GetInt(app, key, def, ret, ini);
+        }
+
+
+
 		static bool WriteInt(
 			const std::string& app,
 			const std::string& key,
@@ -617,69 +724,30 @@ namespace Ambiesoft {
 			const std::string& app,
 			const std::string& key,
 			int val,
-			const std::string& inifile)
+			const char* pIniFile)
 		{
-			std::string sval = std::to_string(static_cast<long long>(val));
-			return WriteString(app, key, sval, inifile);
+			return WriteInt(app, key, val, std::string(pIniFile));
+		}
+		static bool WriteInt(
+			const std::string& app,
+			const std::string& key,
+			int val,
+			const wchar_t* pIniFile)
+		{
+			return WriteInt(app, key, val, std::wstring(pIniFile));
 		}
 
-		// must use templates
-		//static bool WriteInt(
-		//	const std::wstring& appw,
-		//	const std::wstring& keyw,
-		//	int val,
-		//	const std::wstring& inifilew)
-		//{
-		//	std::string app = wstring_to_utf8(appw);
-		//	std::string key = wstring_to_utf8(keyw);
-		//	std::string inifile = wstring_to_utf8(inifilew);
+        template<class C>
+        static bool WriteInt(
+            const std::string& app,
+            const std::string& key,
+            int val,
+            const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
+        {
+            std::string sval = std::to_string(static_cast<long long>(val));
+            return WriteString(app, key, sval, inifile);
+        }
 
-		//	std::string sval = std::to_string(static_cast<long long>(val));
-		//	return WriteString(app, key, sval, inifile);
-		//}
-
-		static bool GetByte1(char c, unsigned char& b)
-		{
-			switch (c)
-			{
-			case '0': b = 0; return true;
-			case '1': b = 1; return true;
-			case '2': b = 2; return true;
-			case '3': b = 3; return true;
-			case '4': b = 4; return true;
-			case '5': b = 5; return true;
-			case '6': b = 6; return true;
-			case '7': b = 7; return true;
-			case '8': b = 8; return true;
-			case '9': b = 9; return true;
-			case 'a': b = 10; return true;
-			case 'A': b = 10; return true;
-			case 'b': b = 11; return true;
-			case 'B': b = 11; return true;
-			case 'c': b = 12; return true;
-			case 'C': b = 12; return true;
-			case 'd': b = 13; return true;
-			case 'D': b = 13; return true;
-			case 'e': b = 14; return true;
-			case 'E': b = 14; return true;
-			case 'f': b = 15; return true;
-			case 'F': b = 15; return true;
-			}
-			b = (unsigned char)'?';
-			return false;
-		}
-		static bool GetByte(char c1, char c2, unsigned char& b)
-		{
-			b = 0;
-			unsigned char b1, b2;
-			if (!GetByte1(c1, b1))
-				return false;
-			if (!GetByte1(c2, b2))
-				return false;
-
-			b = (unsigned char)((b1 << 4) | (unsigned char)b2);
-			return true;
-		}
 
 
 		// Binary starts -------------------
@@ -776,54 +844,70 @@ namespace Ambiesoft {
 
 			return true;
 		}
+        static char GetString1(unsigned char b)
+        {
+            switch (b)
+            {
+            case 0: return '0';
+            case 1: return '1';
+            case 2: return '2';
+            case 3: return '3';
+            case 4: return '4';
+            case 5: return '5';
+            case 6: return '6';
+            case 7: return '7';
+            case 8: return '8';
+            case 9: return '9';
+            case 10: return 'A';
+            case 11: return 'B';
+            case 12: return 'C';
+            case 13: return 'D';
+            case 14: return 'E';
+            case 15: return 'F';
+            }
+            return '?';
+        }
+        static void binToChar(unsigned char b, char* sc2)
+        {
+            sc2[0] = GetString1((unsigned char)(b >> 4));
+            sc2[1] = GetString1((unsigned char)(b & 0x0F));
+        }
+
 	public:
+		template<class C>
 		static bool GetBinary(
 			const std::string& app,
 			const std::string& key,
 			unsigned char* pV,
-			const std::string& inipath)
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
 			HashIniHandleWrapper hih = ReadAll(inipath);
 			return GetBinary(app, key, pV, hih);
 		}
-		static bool GetBinary(
-			const std::string& app,
-			const std::string& key,
-			std::vector<unsigned char>& vRet,
-			const std::string& inipath)
-		{
-			HashIniHandleWrapper hih = ReadAll(inipath);
-			return GetBinary(app, key, vRet, hih);
-		}
 
-		static char GetString1(unsigned char b)
-		{
-			switch (b)
-			{
-			case 0: return '0';
-			case 1: return '1';
-			case 2: return '2';
-			case 3: return '3';
-			case 4: return '4';
-			case 5: return '5';
-			case 6: return '6';
-			case 7: return '7';
-			case 8: return '8';
-			case 9: return '9';
-			case 10: return 'A';
-			case 11: return 'B';
-			case 12: return 'C';
-			case 13: return 'D';
-			case 14: return 'E';
-			case 15: return 'F';
-			}
-			return '?';
-		}
-		static void GetString(unsigned char b, char* sc2)
-		{
-			sc2[0] = GetString1((unsigned char)(b >> 4));
-			sc2[1] = GetString1((unsigned char)(b & 0x0F));
-		}
+        static bool GetBinary(
+            const std::string& app,
+            const std::string& key,
+            std::vector<unsigned char>& vRet,
+            const char* pIniPath)
+        {
+            return GetBinary(app, key, vRet, std::string(pIniPath));
+        }
+        template<class C>
+        static bool GetBinary(
+            const std::string& app,
+            const std::string& key,
+            std::vector<unsigned char>& vRet,
+            const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
+        {
+            HashIniHandleWrapper hih = ReadAll(inipath);
+            return GetBinary(app, key, vRet, hih);
+        }
+
+
+
+
+
 		static bool WriteBinary(
 			const std::string& app,
 			const std::string& key,
@@ -846,29 +930,33 @@ namespace Ambiesoft {
 			for (size_t i=0 ; i < size ; ++i)
 			{
 				unsigned char b = pV[i];
-				GetString(b, sc2);
+                binToChar(b, sc2);
 				sb.append(sc2, sc2 + 2);
 				sum += b;
 			}
-			GetString(sum, sc2);
+            binToChar(sum, sc2);
 			sb.append(sc2, sc2 + 2);
 
 			return WriteString(app, key, sb, hih);
 		}
+
+		template<class C>
 		static bool WriteBinary(
 			const std::string& app,
 			const std::string& key,
 			const std::vector<unsigned char>& v,
-			const std::string& inipath)
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
 			return WriteBinary(app, key, v.data(), v.size(), inipath);
 		}
+
+		template<class C>
 		static bool WriteBinary(
 			const std::string& app,
 			const std::string& key,
 			const unsigned char* pV,
 			size_t size,
-			const std::string& inipath)
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
 			// Mutex mutex = null;
 			//try
@@ -905,12 +993,14 @@ namespace Ambiesoft {
 					return false;
 			return true;
 		}
+
+		template<class C>
 		static bool GetBool(
 			const std::string& app,
 			const std::string& key,
 			bool def,
 			bool& ret,
-			const std::string& inipath)
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
 			HashIniHandleWrapper hih = ReadAll(inipath);
 			return GetBool(app, key, def, ret, hih);
@@ -954,11 +1044,13 @@ namespace Ambiesoft {
 			// for compatibility, use int to write
 			return WriteInt(app, key, val ? 1 : 0, hih);
 		}
+
+		template<class C>
 		static bool WriteBool(
 			const std::string& app,
 			const std::string& key,
 			const bool val,
-			const std::string& inipath)
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
 			return WriteInt(app, key, val ? 1 : 0, inipath);
 		}
@@ -989,19 +1081,23 @@ namespace Ambiesoft {
 
 			return true;
 		}
+
+		template<class C>
 		static bool GetStringArray(const std::string& app,
 			const std::string& key,
 			std::vector<std::string>& vs,
-			const std::string& inipath)
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
 			HashIniHandleWrapper hih(ReadAll(inipath));
 			return GetStringArray(app, key, vs, hih);
 		}
+
+		template<class C>
 		static bool WriteStringArray(
 			const std::string& app,
 			const std::string& key,
 			const std::vector<std::string>& vs,
-			const std::string& inifile)
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
 		{
 			HashIniHandleWrapper ini(ReadAll(inifile));
 

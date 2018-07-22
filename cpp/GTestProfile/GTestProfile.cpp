@@ -1,13 +1,14 @@
 ﻿// GTestProfile.cpp : Defines the entry point for the console application.
 //
+#include <string>
 #include "../Profile/include/ambiesoft.profile.h"
 #include <gtest/gtest.h>
 
 using namespace Ambiesoft;
-
+using namespace std;
 TEST(ProfileTest, Write)
 {
-	EXPECT_TRUE(Profile::WriteInt("test1", "key1", 1, "inifile.ini"));
+    EXPECT_TRUE(Profile::WriteInt("test1", "key1", 1, "inifile.ini"));
 }
 
 TEST(ProfileTest, Read)
@@ -17,6 +18,38 @@ TEST(ProfileTest, Read)
 	int val = 0;
 	EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, "inifile.ini"));
 	EXPECT_EQ(val, 1);
+}
+
+TEST(ProfileTest, WCharTest)
+{
+	// S-W (string write, wstiring read)
+	{
+		EXPECT_TRUE(Profile::WriteInt("test1", "key1", 1, "inifile.ini"));
+
+		int val = 0;
+		EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, L"inifile.ini"));
+		EXPECT_EQ(val, 1);
+	}
+
+
+	// W-S (string write, wstiring read)
+	{
+        EXPECT_TRUE(Profile::WriteInt("test1", "key1", 11233, L"inifile.ini"));
+
+		int val = 0;
+		EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, "inifile.ini"));
+		EXPECT_EQ(val, 11233);
+	}
+
+
+	// W-W (string write, wstiring read)
+	{
+		EXPECT_TRUE(Profile::WriteInt("test1", "key1", 54321, L"inifile.ini"));
+
+		int val = 0;
+		EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, L"inifile.ini"));
+		EXPECT_EQ(val, 54321);
+	}
 }
 
 TEST(ProfileTest, Exception)
