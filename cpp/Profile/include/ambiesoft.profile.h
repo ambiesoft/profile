@@ -23,7 +23,8 @@
 #ifndef __AMBIESOFT_PROFILE_H__
 #define __AMBIESOFT_PROFILE_H__
 
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32) && !defined(__CYGWIN__)
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && (!defined(__CYGWIN__) && !defined(__GNUC__))
+#define HAS_WCHAR_IFSTREAM_OPEN
 #ifdef _MSC_VER
 #if _MSC_VER <= 1900
 #pragma warning( disable : 4503 )
@@ -46,6 +47,7 @@
 #include <codecvt>
 
 // #include <boost/algorithm/string/trim.hpp>
+
 
 namespace Ambiesoft {
 	class error_base : public std::exception
@@ -89,18 +91,18 @@ namespace Ambiesoft {
 
 	// https://stackoverflow.com/a/12903901
 	// convert UTF-8 string to wstring
-	static inline std::wstring utf8_to_wstring(const std::string& str)
-	{
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
-		return myconv.from_bytes(str);
-	}
+//	static inline std::wstring utf8_to_wstring(const std::string& str)
+//	{
+//		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+//		return myconv.from_bytes(str);
+//	}
 
-	// convert wstring to UTF-8 string
-	static inline std::string wstring_to_utf8(const std::wstring& str)
-	{
-		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
-		return myconv.to_bytes(str);
-	}
+//	// convert wstring to UTF-8 string
+//	static inline std::string wstring_to_utf8(const std::wstring& str)
+//	{
+//		std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+//		return myconv.to_bytes(str);
+//	}
 
 	static inline bool myisspace(char c)
 	{
@@ -307,10 +309,12 @@ namespace Ambiesoft {
 		{
 			return _stat(fileName, sstat);
 		}
+#ifdef HAS_WCHAR_IFSTREAM_OPEN
 		static int tstat(const wchar_t* fileName, struct _stat* const sstat)
 		{
 			return _wstat(fileName, sstat);
 		}
+#endif
 	public:
         static HashIniHandle ReadAll(const char* pFile,
                                      bool throwexception = false)
@@ -687,6 +691,7 @@ namespace Ambiesoft {
 		{
 			return GetInt(app, key, def, ret, std::string(pIniFile));
 		}
+#ifdef HAS_WCHAR_IFSTREAM_OPEN
 		static bool GetInt(
 			const std::string& app,
 			const std::string& key,
@@ -696,6 +701,7 @@ namespace Ambiesoft {
 		{
 			return GetInt(app, key, def, ret, std::wstring(pIniFile));
 		}
+#endif
 		template<class C>
         static bool GetInt(
             const std::string& app,
@@ -728,6 +734,7 @@ namespace Ambiesoft {
 		{
 			return WriteInt(app, key, val, std::string(pIniFile));
 		}
+#ifdef HAS_WCHAR_IFSTREAM_OPEN
 		static bool WriteInt(
 			const std::string& app,
 			const std::string& key,
@@ -736,7 +743,7 @@ namespace Ambiesoft {
 		{
 			return WriteInt(app, key, val, std::wstring(pIniFile));
 		}
-
+#endif
         template<class C>
         static bool WriteInt(
             const std::string& app,

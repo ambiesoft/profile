@@ -4,6 +4,10 @@
 #include "../Profile/include/ambiesoft.profile.h"
 #include <gtest/gtest.h>
 
+#if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && (!defined(__CYGWIN__) && !defined(__GNUC__))
+#define HAS_WCHAR_PROFILE
+#endif
+
 using namespace Ambiesoft;
 using namespace std;
 TEST(ProfileTest, Write)
@@ -22,6 +26,7 @@ TEST(ProfileTest, Read)
 
 TEST(ProfileTest, WCharTest)
 {
+#ifdef HAS_WCHAR_PROFILE
 	// S-W (string write, wstiring read)
 	{
 		EXPECT_TRUE(Profile::WriteInt("test1", "key1", 1, "inifile.ini"));
@@ -34,6 +39,7 @@ TEST(ProfileTest, WCharTest)
 
 	// W-S (string write, wstiring read)
 	{
+
         EXPECT_TRUE(Profile::WriteInt("test1", "key1", 11233, L"inifile.ini"));
 
 		int val = 0;
@@ -50,6 +56,7 @@ TEST(ProfileTest, WCharTest)
 		EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, L"inifile.ini"));
 		EXPECT_EQ(val, 54321);
 	}
+#endif
 }
 
 TEST(ProfileTest, Exception)
