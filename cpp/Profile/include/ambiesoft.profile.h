@@ -305,16 +305,16 @@ namespace Ambiesoft {
             return true;
         }
 
-        static int tstat(const char* fileName, struct stat* const sstat)
-		{
-            return stat(fileName, sstat);
-		}
-#ifdef HAS_WCHAR_IFSTREAM_OPEN
-		static int tstat(const wchar_t* fileName, struct _stat* const sstat)
-		{
-			return _wstat(fileName, sstat);
-		}
-#endif
+//        static int tstat(const char* fileName, struct stat* const sstat)
+//		{
+//            return stat(fileName, sstat);
+//		}
+//#ifdef HAS_WCHAR_IFSTREAM_OPEN
+//		static int tstat(const wchar_t* fileName, struct stat* const sstat)
+//		{
+//			return _wstat(fileName, sstat);
+//		}
+//#endif
 	public:
         static HashIniHandle ReadAll(const char* pFile,
                                      bool throwexception = false)
@@ -338,9 +338,9 @@ namespace Ambiesoft {
 				//waitmutex(mutex);
 
 
-                struct stat tmpstat;
-				if (tstat(file.c_str(), &tmpstat) != 0)
-					throw file_not_found_error(std::string()); // TODO: pass filename
+//                struct stat tmpstat;
+//				if (tstat(file.c_str(), &tmpstat) != 0)
+//					throw file_not_found_error(std::string()); // TODO: pass filename
 
 
                 std::ifstream ifs;
