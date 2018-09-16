@@ -61,9 +61,9 @@ namespace Ambiesoft {
 
 		virtual ~error_base(){}
 
-		virtual const char* what() const
-#ifdef __MINGW32__
-		_GLIBCXX_USE_NOEXCEPT
+        virtual const char* what() const
+#if defined(__MINGW32__) || defined(__GNUC__)
+        _GLIBCXX_USE_NOEXCEPT
 #endif
 		{
 			return message_.c_str();
@@ -305,9 +305,9 @@ namespace Ambiesoft {
             return true;
         }
 
-		static int tstat(const char* fileName, struct _stat* const sstat)
+        static int tstat(const char* fileName, struct stat* const sstat)
 		{
-			return _stat(fileName, sstat);
+            return stat(fileName, sstat);
 		}
 #ifdef HAS_WCHAR_IFSTREAM_OPEN
 		static int tstat(const wchar_t* fileName, struct _stat* const sstat)
@@ -338,7 +338,7 @@ namespace Ambiesoft {
 				//waitmutex(mutex);
 
 
-				struct _stat tmpstat;
+                struct stat tmpstat;
 				if (tstat(file.c_str(), &tmpstat) != 0)
 					throw file_not_found_error(std::string()); // TODO: pass filename
 
