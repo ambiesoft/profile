@@ -33,7 +33,8 @@
 #endif
 
 
-#include <sys/stat.h>
+// #include <sys/stat.h>
+#include <unistd.h>
 
 #include <map>
 #include <string>
@@ -315,6 +316,18 @@ namespace Ambiesoft {
 //			return _wstat(fileName, sstat);
 //		}
 //#endif
+
+        static bool file_exists(const char* filename)
+        {
+            return 0 == access(filename,F_OK);
+        }
+        #ifdef HAS_WCHAR_IFSTREAM_OPEN
+        static int file_exists(const wchar_t* fileName, struct stat* const sstat)
+        {
+            return TODO;
+        }
+        #endif
+
 	public:
         static HashIniHandle ReadAll(const char* pFile,
                                      bool throwexception = false)
@@ -342,6 +355,8 @@ namespace Ambiesoft {
 //				if (tstat(file.c_str(), &tmpstat) != 0)
 //					throw file_not_found_error(std::string()); // TODO: pass filename
 
+                if(!file_exists(file.c_str()))
+                    throw file_not_found_error(std::string());
 
                 std::ifstream ifs;
 

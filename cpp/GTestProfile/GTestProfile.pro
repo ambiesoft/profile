@@ -14,3 +14,9 @@ INCLUDEPATH += \
 
 HEADERS += \
     ../Profile/include/ambiesoft.profile.h
+
+linux-g++ {
+    QMAKE_CXXFLAGS += -std=gnu++0x -pthread
+    QMAKE_CFLAGS += -std=gnu++0x -pthread
+    LIBS += -pthread
+}
