@@ -34,7 +34,13 @@
 
 
 // #include <sys/stat.h>
+#if !defined(_MSC_VER)
 #include <unistd.h>
+#endif
+#include <io.h>
+#ifndef F_OK
+#define F_OK 0
+#endif
 
 #include <map>
 #include <string>
@@ -319,12 +325,16 @@ namespace Ambiesoft {
 
         static bool file_exists(const char* filename)
         {
-            return 0 == access(filename,F_OK);
-        }
+#ifdef _MSC_VER
+			return 0 == _access(filename, F_OK);
+#else
+			return 0 == access(filename, F_OK);
+#endif
+		}
         #ifdef HAS_WCHAR_IFSTREAM_OPEN
-        static int file_exists(const wchar_t* fileName, struct stat* const sstat)
+        static bool file_exists(const wchar_t* filename)
         {
-            return TODO;
+            return 0 == _waccess(filename,F_OK);
         }
         #endif
 
