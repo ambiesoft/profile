@@ -36,8 +36,10 @@
 // #include <sys/stat.h>
 #if !defined(_MSC_VER)
 #include <unistd.h>
-#endif
+#else
 #include <io.h>
+#endif
+
 #ifndef F_OK
 #define F_OK 0
 #endif
