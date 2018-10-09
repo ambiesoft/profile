@@ -113,6 +113,25 @@ namespace ProfileCheck
 
                 Profile.WriteString("option", "a", "x", theFile);
             }
+
+            // Test Section
+            {
+                string theFile = "Test.Section.wini";
+                Profile.WriteInt("mysec", "sec1", 1, theFile);
+                Profile.WriteInt("mysec", "sec2", 2, theFile);
+                Profile.WriteInt("mysec", "sec3", 3, theFile);
+
+                string[] arr;
+                Profile.GetSection("mysec", out arr, theFile);
+                Debug.Assert(arr.Length == 3);
+                int sum = 0;
+                foreach(string sec in arr)
+                {
+                    Profile.GetInt("mysec", sec, 100, out val, theFile);
+                    sum += val;
+                }
+                Debug.Assert(sum == (1 + 2 + 3));
+            }
         }
     }
 }

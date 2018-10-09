@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.IO;
@@ -189,7 +190,11 @@ namespace Ambiesoft
 
 
 
-
+        static public bool GetSection(String app, out string[] arr, String inipath)
+        {
+            HashIni hi = ReadAll(inipath);
+            return GetSection(app, out arr, hi);
+        }
 
 
 
@@ -622,5 +627,28 @@ namespace Ambiesoft
 
 
 
+        // section --------------------------->
+        static public bool GetSection(String app, out string[] arr, HashIni hi)
+        {
+            List<String> rets = new List<string>();
+            arr = rets.ToArray();
+            if (hi == null)
+                return false;
+
+            if (app == null)
+                return false;
+
+            Hashtable al = hi.Hash;
+            Hashtable sec = (Hashtable)al[app];
+            if (sec == null)
+                return false;
+
+            foreach(object o in sec.Keys)
+                rets.Add(o.ToString());
+
+            arr = rets.ToArray();
+            return true;
+        }
+        // <--------------------------- section
     }
 }
