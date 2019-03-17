@@ -1,3 +1,4 @@
+*.suo
 
 # QtCreator's built files
 build-*/

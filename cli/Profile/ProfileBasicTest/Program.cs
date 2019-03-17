@@ -27,6 +27,7 @@ using System.Diagnostics;
 
 namespace ProfileCheck
 {
+    using System.IO;
     using Ambiesoft;
     static class Program
     {
@@ -99,6 +100,7 @@ namespace ProfileCheck
 
             // test Test.SectionFormat.wini
             {
+                Debug.Assert(File.Exists("Test.SectionFormat.wini"));
                 string s;
                 Profile.GetString("SEC", "a", "", out s, "Test.SectionFormat.wini");
                 Debug.Assert(s == "1");

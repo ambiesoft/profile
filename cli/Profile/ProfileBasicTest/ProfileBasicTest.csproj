@@ -71,4 +71,7 @@
   <Target Name="AfterBuild">
   </Target>
   -->
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)Test.SectionFormat.wini" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
