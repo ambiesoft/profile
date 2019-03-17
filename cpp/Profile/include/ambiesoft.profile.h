@@ -95,7 +95,7 @@ namespace Ambiesoft {
 			: error_base(message) {}
 	};
 
-	typedef void* HashIniHandle;
+	typedef struct STHashIniHandleDummy {} *HashIniHandle;
 	// typedef unsigned char byte;
 
 	// https://stackoverflow.com/a/12903901
@@ -216,7 +216,7 @@ namespace Ambiesoft {
 	public:
 		static HashIniHandle CreateEmptyInstanceForSpecialUse()
 		{
-			return static_cast<HashIniHandle>(new HashIni());
+			return reinterpret_cast<HashIniHandle>(new HashIni());
 		}
 
 		friend Profile;
@@ -353,7 +353,7 @@ namespace Ambiesoft {
 		static HashIniHandle ReadAll(const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& file,
 									 bool throwexception = false)
 		{
-			HashIni* hi = static_cast<HashIni*>(HashIni::CreateEmptyInstanceForSpecialUse());
+			HashIni* hi = reinterpret_cast<HashIni*>(HashIni::CreateEmptyInstanceForSpecialUse());
 			HashIni::HashAll& al = hi->Hash();
 
 			try
@@ -443,7 +443,7 @@ namespace Ambiesoft {
 
 					}
 				}
-				return hi;
+				return reinterpret_cast<HashIniHandle>(hi);
 			}
 			catch (file_not_found_error& e)
 			{
@@ -475,7 +475,7 @@ namespace Ambiesoft {
 							 const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath,
 							 bool throwexception)
 		{
-			HashIni* hi = static_cast<HashIni*>(hih);
+			HashIni* hi = reinterpret_cast<HashIni*>(hih);
 			if (hi == nullptr)
 				return false;
 
@@ -549,7 +549,7 @@ namespace Ambiesoft {
 		}
 		static void FreeHandle(HashIniHandle hih)
 		{
-			HashIni* hi = static_cast<HashIni*>(hih);
+			HashIni* hi = reinterpret_cast<HashIni*>(hih);
 			delete hi;
 		}
 
@@ -560,7 +560,7 @@ namespace Ambiesoft {
 			std::string& ret,
 			HashIniHandle hih)
 		{
-			HashIni* hi = static_cast<HashIni*>(hih);
+			HashIni* hi = reinterpret_cast<HashIni*>(hih);
 			ret = def;
 			if (hi == nullptr)
 				return false;
@@ -584,16 +584,29 @@ namespace Ambiesoft {
 			return true;
 		}
 
-		template<class C>
-		static bool GetString(const std::string& app,
+#ifdef HAS_WCHAR_IFSTREAM_OPEN
+		static bool GetString(
+			const std::string& app,
 			const std::string& key,
 			const std::string& def,
-			std::basic_string<C, std::char_traits<C>, std::allocator<C>>& ret,
-			const std::string& inifile)
+			std::string& ret,
+			const wchar_t* pIniFile)
+		{
+			return GetString(app, key, def, ret, std::wstring(pIniFile));
+		}
+#endif
+		template<class C>
+		static bool GetString(
+			const std::string& app,
+			const std::string& key,
+			const std::string& def,
+			std::string& ret,
+			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
 		{
 			HashIniHandleWrapper ini(ReadAll(inifile));
 			return GetString(app, key, def, ret, ini);
 		}
+
 
 
 
@@ -602,7 +615,7 @@ namespace Ambiesoft {
 			const char* val,
 			HashIniHandle hih)
 		{
-			HashIni* hi = static_cast<HashIni*>(hih);
+			HashIni* hi = reinterpret_cast<HashIni*>(hih);
 
 			if (hi == nullptr)
 				return false;
@@ -688,11 +701,11 @@ namespace Ambiesoft {
 			int& ret,
 			HashIniHandle hih)
 		{
-			HashIni* hi = static_cast<HashIni*>(hih);
+			// HashIni* hi = reinterpret_cast<HashIni*>(hih);
 			ret = def;
 
 			std::string sret;
-			if (!GetString(app, key, std::string(), sret, hi))
+			if (!GetString(app, key, std::string(), sret, hih))
 				return false;
 
 			if (sret.empty())
@@ -1096,7 +1109,7 @@ namespace Ambiesoft {
 			std::vector<std::string>& vs,
 			HashIniHandle hih)
 		{
-			HashIni* hi = static_cast<HashIni*>(hih);
+			HashIni* hi = reinterpret_cast<HashIni*>(hih);
 
 			if (hi == nullptr)
 				return false;
@@ -1146,7 +1159,7 @@ namespace Ambiesoft {
 			const std::vector<std::string>& vs,
 			HashIniHandle hih)
 		{
-			HashIni* hi = static_cast<HashIni*>(hih);
+			HashIni* hi = reinterpret_cast<HashIni*>(hih);
 
 			if (hi == nullptr)
 				return false;
