@@ -341,11 +341,11 @@ namespace Ambiesoft {
         #endif
 
 	public:
-        static HashIniHandle ReadAll(const char* pFile,
-                                     bool throwexception = false)
-        {
-            return ReadAll(std::string(pFile), throwexception);
-        }
+        //static HashIniHandle ReadAll(const char* pFile,
+        //                             bool throwexception = false)
+        //{
+        //    return ReadAll(std::string(pFile), throwexception);
+        //}
 
 
 
@@ -448,17 +448,26 @@ namespace Ambiesoft {
 			catch (file_not_found_error& e)
 			{
 				if (throwexception)
+				{
+					Profile::FreeHandle(reinterpret_cast<HashIniHandle>(hi));
 					throw e;
+				}
 			}
 			catch (file_not_opened_error& e)
 			{
 				if (throwexception)
+				{
+					Profile::FreeHandle(reinterpret_cast<HashIniHandle>(hi));
 					throw e;
+				}
 			}
 			catch (std::exception& e)
 			{
 				if (throwexception)
+				{
+					Profile::FreeHandle(reinterpret_cast<HashIniHandle>(hi));
 					throw e;
+				}
 			}
 			return (HashIniHandle)hi;
 		}
