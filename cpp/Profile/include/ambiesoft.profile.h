@@ -227,6 +227,7 @@ namespace Ambiesoft {
 
 	class Profile
 	{
+	public:
 		class HashIniHandleWrapper
 		{
 			HashIniHandle h_;
