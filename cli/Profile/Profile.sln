@@ -1,9 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 9.00
-# Visual C# Express 2005
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profile", "Profile\Profile.csproj", "{2F3C370C-A46F-4625-8E35-4F2E5EB3DDB9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProfileBasicTest", "ProfileBasicTest\ProfileBasicTest.csproj", "{73FCE154-A6AA-4B2E-8331-4AEB0568EF07}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProfile", "TestProfile\TestProfile.csproj", "{7E4C0E24-CA61-486D-A1B1-9772896CB2F1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +17,10 @@ Global
 		{2F3C370C-A46F-4625-8E35-4F2E5EB3DDB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2F3C370C-A46F-4625-8E35-4F2E5EB3DDB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2F3C370C-A46F-4625-8E35-4F2E5EB3DDB9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73FCE154-A6AA-4B2E-8331-4AEB0568EF07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73FCE154-A6AA-4B2E-8331-4AEB0568EF07}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73FCE154-A6AA-4B2E-8331-4AEB0568EF07}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73FCE154-A6AA-4B2E-8331-4AEB0568EF07}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E4C0E24-CA61-486D-A1B1-9772896CB2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E4C0E24-CA61-486D-A1B1-9772896CB2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E4C0E24-CA61-486D-A1B1-9772896CB2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E4C0E24-CA61-486D-A1B1-9772896CB2F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

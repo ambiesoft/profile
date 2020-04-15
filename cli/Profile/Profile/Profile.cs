@@ -84,8 +84,8 @@ namespace Ambiesoft
             Mutex mutex = null;
             try
             {
-                mutex = createmutex(inipath);
-                waitmutex(mutex);
+                mutex = createMutex(inipath);
+                waitMutex(mutex);
 
                 HashIni hi = ReadAll(inipath);
 
@@ -104,7 +104,6 @@ namespace Ambiesoft
                     mutex.ReleaseMutex();
                 }
             }
-
         }
 
 
@@ -120,8 +119,8 @@ namespace Ambiesoft
             Mutex mutex = null;
             try
             {
-                mutex = createmutex(inipath);
-                waitmutex(mutex);
+                mutex = createMutex(inipath);
+                waitMutex(mutex);
                 HashIni hi = ReadAll(inipath);
                 if (hi == null)
                     return false;
@@ -152,8 +151,8 @@ namespace Ambiesoft
             Mutex mutex = null;
             try
             {
-                mutex = createmutex(inipath);
-                waitmutex(mutex);
+                mutex = createMutex(inipath);
+                waitMutex(mutex);
                 HashIni hi = ReadAll(inipath);
                 if (hi == null)
                     return false;

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Profile")]
+[assembly: AssemblyTitle("TestProfile")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ambiesoft")]
-[assembly: AssemblyProduct("Profile")]
-[assembly: AssemblyCopyright("Copyright © Ambiesoft 2020")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("TestProfile")]
+[assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,17 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("1908ad8f-db51-4427-baf4-64b62d5b1ce4")]
+[assembly: Guid("13f50198-9fe1-421d-83e9-e1543a683abb")]
 
-[assembly: AssemblyVersion("1.0.2.*")]
-// [assembly: AssemblyFileVersion("1.0.0.1")]
+// Version information for an assembly consists of the following four values:
+//
+//      Major Version
+//      Minor Version 
+//      Build Number
+//      Revision
+//
+// You can specify all the values or you can default the Build and Revision Numbers 
+// by using the '*' as shown below:
+// [assembly: AssemblyVersion("1.0.*")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]

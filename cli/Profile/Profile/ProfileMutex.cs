@@ -31,7 +31,7 @@ namespace Ambiesoft
 {
     partial class Profile
     {
-        static private Mutex createmutex(string filename)
+        static private Mutex createMutex(string filename)
         {
             FileInfo fi = new FileInfo(filename);
             string mutexname = @"Global\profile-" + fi.FullName.ToLower().Replace('\\', '/');
@@ -40,7 +40,7 @@ namespace Ambiesoft
 
             return new Mutex(false, mutexname);
         }
-        static private void waitmutex(Mutex mutex)
+        static private void waitMutex(Mutex mutex)
         {
             try
             {

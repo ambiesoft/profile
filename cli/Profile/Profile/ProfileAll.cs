@@ -53,14 +53,38 @@ namespace Ambiesoft
         }
         static public HashIni ReadAll(String inipath, bool throwexception)
         {
-            Mutex mutex = null;
-            HashIni hi = HashIni.CreateEmptyInstanceForSpecialUse();
-            Hashtable al = hi.Hash;
+            Mutex mutex = createMutex(inipath);
+            waitMutex(mutex);
             try
             {
-                mutex = createmutex(inipath);
-                waitmutex(mutex);
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(inipath, System.Text.Encoding.UTF8))
+                {
+                    return ReadAll(sr);
+                }
+            }
+            catch (Exception e3)
+            {
+                if (throwexception)
+                    throw e3;
+
+                return HashIni.CreateEmptyInstanceForSpecialUse();
+            }
+            finally
+            {
+                if (mutex != null)
+                {
+                    mutex.ReleaseMutex();
+                }
+            }
+
+        }
+        static public HashIni ReadAll(StreamReader sr)
+        {
+            HashIni hi = HashIni.CreateEmptyInstanceForSpecialUse();
+            Hashtable al = hi.Hash;
+
+            {
+                
                 {
 
                     String line = null;
@@ -119,20 +143,6 @@ namespace Ambiesoft
                     }
                 }
             }
-            catch (Exception e3)
-            {
-                if (throwexception)
-                    throw e3;
-
-                return hi;
-            }
-            finally
-            {
-                if (mutex != null)
-                {
-                    mutex.ReleaseMutex();
-                }
-            }
             return hi;
         }
 
@@ -140,8 +150,6 @@ namespace Ambiesoft
         {
             return WriteAll(hi, inipath, false);
         }
-
-
         static public bool WriteAll(HashIni hi, String inipath, bool throwexception)
         {
             if (hi == null)
@@ -151,48 +159,14 @@ namespace Ambiesoft
             if (al == null)
                 return false;
 
+            Mutex mutex = createMutex(inipath);
+            waitMutex(mutex);
 
-            Mutex mutex = null;
             try
             {
-                mutex = createmutex(inipath);
-                waitmutex(mutex);
-
                 using (System.IO.StreamWriter sw = new System.IO.StreamWriter(inipath, false, new System.Text.UTF8Encoding(false)))
                 {
-
-                    ArrayList arKeys = new ArrayList(al.Keys);
-                    arKeys.Sort();
-
-                    foreach (String secname in arKeys)
-                    {
-                        sw.Write("[");
-                        sw.Write(secname);
-                        sw.Write("]");
-                        sw.WriteLine();
-
-                        Hashtable sec = (Hashtable)al[secname];
-                        if (sec == null)
-                            continue;
-
-                        ArrayList arKeyKeys = new ArrayList(sec.Keys);
-                        arKeyKeys.Sort();
-                        foreach (String keyname in arKeyKeys)
-                        {
-                            ArrayList arent = (ArrayList)sec[keyname];
-                            foreach (String val in arent)
-                            {
-                                if (val != null)
-                                {
-                                    sw.Write(keyname);
-                                    sw.Write("=");
-                                    sw.Write(val);
-                                    sw.WriteLine();
-                                }
-                            }
-                        }
-                        sw.WriteLine();
-                    }
+                    return WriteAll(hi, sw);
                 }
             }
             catch (Exception ex)
@@ -209,7 +183,68 @@ namespace Ambiesoft
                     mutex.ReleaseMutex();
                 }
             }
+        }
+        static public bool WriteAll(HashIni hi, System.IO.StreamWriter sw)
+        {
+            if (hi == null)
+                return false;
+
+            Hashtable al = hi.Hash;
+            if (al == null)
+                return false;
+
+            ArrayList arKeys = new ArrayList(al.Keys);
+            arKeys.Sort();
+
+            foreach (String secname in arKeys)
+            {
+                sw.Write("[");
+                sw.Write(secname);
+                sw.Write("]");
+                sw.WriteLine();
+
+                Hashtable sec = (Hashtable)al[secname];
+                if (sec == null)
+                    continue;
+
+                ArrayList arKeyKeys = new ArrayList(sec.Keys);
+                arKeyKeys.Sort();
+                foreach (String keyname in arKeyKeys)
+                {
+                    ArrayList arent = (ArrayList)sec[keyname];
+                    foreach (String val in arent)
+                    {
+                        if (val != null)
+                        {
+                            sw.Write(keyname);
+                            sw.Write("=");
+                            sw.Write(val);
+                            sw.WriteLine();
+                        }
+                    }
+                }
+                sw.WriteLine();
+            }
             return true;
+        }
+
+        static public string ReadAllAsString(HashIni hi)
+        {
+            MemoryStream ms = new MemoryStream();
+            StreamWriter sw = new StreamWriter(ms);
+            if (!WriteAll(hi, sw))
+                return null;
+            sw.Flush();
+            string outString = Encoding.UTF8.GetString(ms.ToArray());
+            ms.Close();
+            sw.Close();
+            return outString;
+        }
+        static public HashIni WriteAllAsString(string iniString)
+        {
+            MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(iniString));
+            StreamReader sr = new StreamReader(ms);
+            return ReadAll(sr);
         }
     }
 }
