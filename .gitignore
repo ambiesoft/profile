@@ -6,12 +6,18 @@ build-*/
 # Many ides create this user specific file
 *.user
 
+cli/Profile/Debug/
+cli/Profile/Profile.sdf
 
 # Code::Blocks files
 cpp/TestProfile/obj/
 cpp/build/
 cpp/TestProfile/TestProfile.depend
 cpp/TestProfile/TestProfile.layout
+cli/Profile/Release/
+cli/Profile/TestProfile/bin/
+cli/Profile/TestProfile/obj/
+cli/Profile/ipch/
 
 # Visual Studio files
 cpp/TestProfile/.vs/

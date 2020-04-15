@@ -106,7 +106,7 @@ bool checksameint(LPCTSTR sec, LPCTSTR key, LPCTSTR file)
 	if (a1 == a2)
 		return true;
 
-	Console::Error->WriteLine(String::Format("int failed:sec={0}, key={1}, file={2} ({3} != {4}",
+	Console::Error->WriteLine(String::Format("int failed:sec={0}, key={1}, file={2} (win32 != Profile)({3} != {4}",
 		gcnew String(sec),gcnew String(key),gcnew String(file) , a1, a2));
 	return false;
 }
