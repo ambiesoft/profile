@@ -18,6 +18,8 @@ cli/Profile/Release/
 cli/Profile/TestProfile/bin/
 cli/Profile/TestProfile/obj/
 cli/Profile/ipch/
+cli/Profile/ProfileCompatTest/Release/
+
 
 # Visual Studio files
 cpp/TestProfile/.vs/
