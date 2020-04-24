@@ -154,5 +154,29 @@ namespace TestProfile
                 Assert.AreEqual(k, "mystring");
             }
         }
+
+        [TestMethod]
+        public void TestFloat()
+        {
+            string inipath = Path.Combine(AssemblyDirectory, "TestProfile.ini");
+            float f = 1.234f;
+            Assert.IsTrue(Profile.WriteFloat("fff", "ttt", f, inipath));
+
+            f = 0;
+            Assert.IsTrue(Profile.GetFloat("fff", "ttt", 0, out f, inipath));
+            Assert.AreEqual(f, 1.234f);
+        }
+
+        [TestMethod]
+        public void TestDouble()
+        {
+            string inipath = Path.Combine(AssemblyDirectory, "TestProfile.ini");
+            double d = 1222.234;
+            Assert.IsTrue(Profile.WriteDouble("fff", "ttt", d, inipath));
+
+            d = 0;
+            Assert.IsTrue(Profile.GetDouble("fff", "ttt", 0, out d, inipath));
+            Assert.AreEqual(d, 1222.234);
+        }
     }
 }

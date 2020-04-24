@@ -61,13 +61,36 @@ namespace Ambiesoft
 
 
 
-
         static public bool GetInt(String app, String key, int def, out int ret, String inipath)
         {
             HashIni al = ReadAll(inipath);
             return GetInt(app, key, def, out ret, al);
         }
         static public bool WriteInt(String app, String key, int val, String inipath)
+        {
+            String sval = val.ToString();
+            return WriteString(app, key, sval, inipath);
+        }
+
+
+        static public bool GetFloat(String app, String key, float def, out float ret, String inipath)
+        {
+            HashIni al = ReadAll(inipath);
+            return GetFloat(app, key, def, out ret, al);
+        }
+        static public bool WriteFloat(String app, String key, float val, String inipath)
+        {
+            String sval = val.ToString();
+            return WriteString(app, key, sval, inipath);
+        }
+
+        
+        static public bool GetDouble(String app, String key, double def, out double ret, String inipath)
+        {
+            HashIni al = ReadAll(inipath);
+            return GetDouble(app, key, def, out ret, al);
+        }
+        static public bool WriteDouble(String app, String key, double val, String inipath)
         {
             String sval = val.ToString();
             return WriteString(app, key, sval, inipath);
@@ -240,7 +263,6 @@ namespace Ambiesoft
             if (sret == null)
                 return false;
 
-
             try
             {
                 ret = int.Parse(sret,
@@ -255,6 +277,68 @@ namespace Ambiesoft
             return true;
         }
         static public bool WriteInt(String app, String key, int val, HashIni hi)
+        {
+            String sval = val.ToString();
+            return WriteString(app, key, sval, hi);
+        }
+
+
+        static public bool GetFloat(String app, String key, float def, out float ret, HashIni hi)
+        {
+            ret = def;
+
+            String sret;
+            if (!GetString(app, key, null, out sret, hi))
+                return false;
+
+            if (sret == null)
+                return false;
+
+            try
+            {
+                ret = float.Parse(sret,
+                    System.Globalization.NumberStyles.Any
+                    );
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        static public bool WriteFloat(String app, String key, float val, HashIni hi)
+        {
+            String sval = val.ToString();
+            return WriteString(app, key, sval, hi);
+        }
+
+
+        static public bool GetDouble(String app, String key, double def, out double ret, HashIni hi)
+        {
+            ret = def;
+
+            String sret;
+            if (!GetString(app, key, null, out sret, hi))
+                return false;
+
+            if (sret == null)
+                return false;
+
+            try
+            {
+                ret = double.Parse(sret,
+                    System.Globalization.NumberStyles.Any
+                    );
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        static public bool WriteDouble(String app, String key, double val, HashIni hi)
         {
             String sval = val.ToString();
             return WriteString(app, key, sval, hi);
