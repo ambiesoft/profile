@@ -46,7 +46,7 @@ using namespace Ambiesoft;
 template<class C>
 void testwrite(std::basic_string<C, std::char_traits<C>, std::allocator<C>> filename)
 {
-    HashIniHandle ini = Profile::ReadAll(filename, false);
+    Profile::CHashIni ini = Profile::ReadAll(filename, false);
 
     VERIFY(Profile::WriteInt("mysection", "mykey", 12345, ini));
     VERIFY(Profile::WriteInt("mysection", "mykey", 54321, ini));
@@ -64,11 +64,10 @@ void testwrite(std::basic_string<C, std::char_traits<C>, std::allocator<C>> file
     VERIFY(Profile::WriteStringArray("sa", "sak", v, ini));
 
     VERIFY(Profile::WriteAll(ini, filename));
-    Profile::FreeHandle(ini);
 }
 void testread(const string& filename)
 {
-    HashIniHandle ini = Profile::ReadAll(filename, false);
+    Profile::CHashIni ini = Profile::ReadAll(filename, false);
 
     int intval;
     string sval;
@@ -89,8 +88,6 @@ void testread(const string& filename)
     assert(v.size() == 2);
     assert(v[0] == "aaa");
     assert(v[1] == "bbb");
-
-    Profile::FreeHandle(ini);
 }
 
 template<class C>

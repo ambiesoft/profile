@@ -228,13 +228,13 @@ namespace Ambiesoft {
 	class Profile
 	{
 	public:
-		class HashIniHandleWrapper
+		class CHashIni
 		{
 			HashIniHandle h_;
 		public:
-			HashIniHandleWrapper(HashIniHandle h) : h_(h)
+			CHashIni(HashIniHandle h) : h_(h)
 			{}
-			~HashIniHandleWrapper()
+			~CHashIni()
 			{
 				Profile::FreeHandle(h_);
 			}
@@ -613,7 +613,7 @@ namespace Ambiesoft {
 			std::string& ret,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
 		{
-			HashIniHandleWrapper ini(ReadAll(inifile));
+			CHashIni ini(ReadAll(inifile));
 			return GetString(app, key, def, ret, ini);
 		}
 
@@ -689,7 +689,7 @@ namespace Ambiesoft {
 				// mutex = createmutex(inipath);
 				// waitmutex(mutex);
 
-				HashIniHandleWrapper ini(ReadAll(inifile));
+				CHashIni ini(ReadAll(inifile));
 
 				if (!WriteString(app, key, val, ini))
 					return false;
@@ -760,7 +760,7 @@ namespace Ambiesoft {
             int& ret,
             const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
         {
-            HashIniHandleWrapper ini(ReadAll(inifile));
+			CHashIni ini(ReadAll(inifile));
             return GetInt(app, key, def, ret, ini);
         }
 
@@ -938,7 +938,7 @@ namespace Ambiesoft {
 			unsigned char* pV,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
-			HashIniHandleWrapper hih = ReadAll(inipath);
+			CHashIni hih = ReadAll(inipath);
 			return GetBinary(app, key, pV, hih);
 		}
 
@@ -957,7 +957,7 @@ namespace Ambiesoft {
             std::vector<unsigned char>& vRet,
             const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
         {
-            HashIniHandleWrapper hih = ReadAll(inipath);
+			CHashIni hih = ReadAll(inipath);
             return GetBinary(app, key, vRet, hih);
         }
 
@@ -1059,7 +1059,7 @@ namespace Ambiesoft {
 			bool& ret,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
-			HashIniHandleWrapper hih = ReadAll(inipath);
+			CHashIni hih = ReadAll(inipath);
 			return GetBool(app, key, def, ret, hih);
 		}
 		static bool GetBool(
@@ -1145,7 +1145,7 @@ namespace Ambiesoft {
 			std::vector<std::string>& vs,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
-			HashIniHandleWrapper hih(ReadAll(inipath));
+			CHashIni hih(ReadAll(inipath));
 			return GetStringArray(app, key, vs, hih);
 		}
 
@@ -1156,7 +1156,7 @@ namespace Ambiesoft {
 			const std::vector<std::string>& vs,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
 		{
-			HashIniHandleWrapper ini(ReadAll(inifile));
+			CHashIni ini(ReadAll(inifile));
 
 			if (!WriteStringArray(app, key, vs, ini))
 				return false;
