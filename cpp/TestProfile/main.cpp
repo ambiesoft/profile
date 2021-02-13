@@ -46,7 +46,7 @@ using namespace Ambiesoft;
 template<class C>
 void testwrite(std::basic_string<C, std::char_traits<C>, std::allocator<C>> filename)
 {
-    Profile::CHashIni ini = Profile::ReadAll(filename, false);
+    Profile::CHashIni ini(Profile::ReadAll(filename, false));
 
     VERIFY(Profile::WriteInt("mysection", "mykey", 12345, ini));
     VERIFY(Profile::WriteInt("mysection", "mykey", 54321, ini));
@@ -67,7 +67,7 @@ void testwrite(std::basic_string<C, std::char_traits<C>, std::allocator<C>> file
 }
 void testread(const string& filename)
 {
-    Profile::CHashIni ini = Profile::ReadAll(filename, false);
+    Profile::CHashIni ini(Profile::ReadAll(filename, false));
 
     int intval;
     string sval;
@@ -174,16 +174,20 @@ void testdirect(const std::basic_string<C, std::char_traits<C>, std::allocator<C
 
     assert(memcmp(&ts, &tsout, sizeof(ts)) == 0);
 
-//	const wchar_t* pU = L"ユーティーエフ１６斷言、宣稱、主張、聲明어서션(assertion) 또는";
-//	Profile::WriteString("UTF16APP", "UTF16KEY", pU, inifile);
-//	std::wstring ws;
-//	Profile::GetString("UTF16APP", "UTF16KEY", L"", ws, inifile);
-//	assert(ws == pU);
-
-    string ss;
-    Profile::WriteString("quote", "quote", "\"", inifile);
-    Profile::GetString("quote", "quote", "", ss, inifile);
-    assert(ss == "\"");
+    {
+        const char* pU8 = u8"ユーティーエフ１６斷言、宣稱、主張、聲明어서션(assertion) 또는";
+        string s;
+        Profile::WriteString("UTF8APP", "UTF8KEY", pU8, inifile);
+        Profile::GetString("UTF8APP", "UTF8KEY", "", s, inifile);
+        assert(s == pU8);
+    }
+    
+    {
+        string ss;
+        Profile::WriteString("quote", "quote", "\"", inifile);
+        Profile::GetString("quote", "quote", "", ss, inifile);
+        assert(ss == "\"");
+    }
 }
 
 template<class C>

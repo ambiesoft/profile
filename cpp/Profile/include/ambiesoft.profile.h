@@ -939,7 +939,7 @@ namespace Ambiesoft {
 			unsigned char* pV,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
-			CHashIni hih = ReadAll(inipath);
+			CHashIni hih(ReadAll(inipath));
 			return GetBinary(app, key, pV, hih);
 		}
 
@@ -1060,7 +1060,7 @@ namespace Ambiesoft {
 			bool& ret,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
-			CHashIni hih = ReadAll(inipath);
+			CHashIni hih(ReadAll(inipath));
 			return GetBool(app, key, def, ret, hih);
 		}
 		static bool GetBool(
