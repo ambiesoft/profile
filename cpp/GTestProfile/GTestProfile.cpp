@@ -2,6 +2,8 @@
 //
 #include <string>
 #include "../Profile/include/ambiesoft.profile.h"
+
+// run git submodule update -i
 #include <gtest/gtest.h>
 
 #if (defined(WIN32) || defined(_WIN32) || defined(__WIN32)) && (!defined(__CYGWIN__) && !defined(__GNUC__))
@@ -63,7 +65,7 @@ TEST(ProfileTest, Exception)
 {
     try
     {
-        Profile::ReadAll("\";;;;;;;;:::", true);
+        Profile::ReadAll<char>("\";;;;;;;;:::", true);
         FAIL() << "Expected exception";
     }
     catch(file_not_found_error&)

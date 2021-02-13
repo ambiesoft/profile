@@ -120,14 +120,14 @@ namespace Ambiesoft {
 	// https://stackoverflow.com/a/217605
 	// trim from start (in place)
 	static inline void ltrim(std::string &s) {
-		s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](int ch) {
+		s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](char ch) {
 			return !myisspace(ch);
 		}));
 	}
 
 	// trim from end (in place)
     static inline void rtrim(std::string &s) {
-        s.erase(std::find_if(s.rbegin(), s.rend(), [](int ch) {
+        s.erase(std::find_if(s.rbegin(), s.rend(), [](char ch) {
             return !myisspace(ch);
         }).base(), s.end());
     }
@@ -232,7 +232,7 @@ namespace Ambiesoft {
 		{
 			HashIniHandle h_;
 		public:
-			CHashIni(HashIniHandle h) : h_(h)
+			explicit CHashIni(HashIniHandle h) : h_(h)
 			{}
 			~CHashIni()
 			{
@@ -386,11 +386,11 @@ namespace Ambiesoft {
 
 				// skip UTF-8 BOM
 				{
-					char a, b, c;
-					a = ifs.get();
-					b = ifs.get();
-					c = ifs.get();
-					if (a != (char)0xEF || b != (char)0xBB || c != (char)0xBF)
+					unsigned char a, b, c;
+					a = (unsigned char)ifs.get();
+					b = (unsigned char)ifs.get();
+					c = (unsigned char)ifs.get();
+					if (a != 0xEF || b != 0xBB || c != 0xBF)
 					{
 						ifs.seekg(0);
 					}
@@ -526,13 +526,14 @@ namespace Ambiesoft {
 					{
 						std::string keyname = its->first;
 						std::vector<std::string>& arent = its->second;
-						for (std::vector<std::string>::const_iterator it = arent.begin() ; it != arent.end(); ++it)
+						for (std::vector<std::string>::const_iterator itt = arent.begin() ;
+							itt != arent.end(); ++itt)
 						{
-							if (!it->empty())
+							if (!itt->empty())
 							{
 								ofs << keyname;
 								ofs << "=";
-								ofs << *it;
+								ofs << *itt;
 								ofs << std::endl;
 							}
 						}
@@ -957,7 +958,7 @@ namespace Ambiesoft {
             std::vector<unsigned char>& vRet,
             const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
         {
-			CHashIni hih = ReadAll(inipath);
+			CHashIni hih(ReadAll(inipath));
             return GetBinary(app, key, vRet, hih);
         }
 
