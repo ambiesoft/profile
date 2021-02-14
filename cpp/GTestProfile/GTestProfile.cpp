@@ -12,54 +12,170 @@
 
 using namespace Ambiesoft;
 using namespace std;
-TEST(ProfileTest, Write)
+TEST(ProfileTest, Int)
 {
-    EXPECT_TRUE(Profile::WriteInt("test1", "key1", 1, "inifile.ini"));
-}
-
-TEST(ProfileTest, Read)
-{
-	EXPECT_TRUE(Profile::WriteInt("test1", "key1", 1, "inifile.ini"));
-
-	int val = 0;
-	EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, "inifile.ini"));
-	EXPECT_EQ(val, 1);
-}
-
-TEST(ProfileTest, WCharTest)
-{
-#ifdef HAS_WCHAR_PROFILE
-	// S-W (string write, wstiring read)
+	string iniFile("inifile.ini");
 	{
-		EXPECT_TRUE(Profile::WriteInt("test1", "key1", 1, "inifile.ini"));
+		EXPECT_TRUE(Profile::WriteInt("test1", "key1", 1, iniFile));
 
 		int val = 0;
-		EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, L"inifile.ini"));
+		EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, iniFile));
 		EXPECT_EQ(val, 1);
 	}
 
-
-	// W-S (string write, wstiring read)
 	{
+		EXPECT_TRUE(Profile::WriteInt("mysection", "mykey", 12345, iniFile));
+		EXPECT_TRUE(Profile::WriteInt("mysection", "mykey", 54321, iniFile));
 
-        EXPECT_TRUE(Profile::WriteInt("test1", "key1", 11233, L"inifile.ini"));
+		EXPECT_TRUE(Profile::WriteInt("mysection", "mykey2", 21, iniFile));
+		EXPECT_TRUE(Profile::WriteInt("mysection2", "mykey21", 212, iniFile));
 
-		int val = 0;
-		EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, "inifile.ini"));
-		EXPECT_EQ(val, 11233);
+		int intval;
+		Profile::GetInt("mysection", "mykey", -1, intval, iniFile);
+		EXPECT_EQ(intval , 54321);
+		Profile::GetInt("mysection", "mykey2", -1, intval, iniFile);
+		EXPECT_EQ(intval , 21);
+		Profile::GetInt("mysection2", "mykey21", -1, intval, iniFile);
+		EXPECT_EQ(intval , 212);
 	}
-
-
-	// W-W (string write, wstiring read)
-	{
-		EXPECT_TRUE(Profile::WriteInt("test1", "key1", 54321, L"inifile.ini"));
-
-		int val = 0;
-		EXPECT_TRUE(Profile::GetInt("test1", "key1", 0, val, L"inifile.ini"));
-		EXPECT_EQ(val, 54321);
-	}
-#endif
 }
+
+TEST(ProfileTest, Bool)
+{
+	string iniFile("inifile.ini");
+	{
+		bool b;
+		Profile::WriteBool("MBS", "MKB", true, iniFile);
+		Profile::GetBool("MBS", "MKB", false, b, iniFile);
+		EXPECT_TRUE(b);
+
+		Profile::WriteBool("MBS", "MKB", false, iniFile);
+		Profile::GetBool("MBS", "MKB", true, b, iniFile);
+		EXPECT_FALSE(b);
+	}
+}
+
+TEST(ProfileTest, String)
+{
+	string iniFile("inifile.ini");
+	{
+		EXPECT_TRUE(Profile::WriteString("mysection2", "mykey22", u8"あああ", iniFile));
+
+		string sval;
+		Profile::GetString("mysection2", "mykey22", string(), sval, iniFile);
+		EXPECT_EQ(sval, u8"あああ");
+	}
+
+	{
+		{
+			const char* pU8 = u8"ユーティーエフ１６斷言、宣稱、主張、聲明어서션(assertion) 또는";
+			string s;
+			Profile::WriteString("UTF8APP", "UTF8KEY", pU8, iniFile);
+			Profile::GetString("UTF8APP", "UTF8KEY", "", s, iniFile);
+			EXPECT_EQ(s , pU8);
+		}
+
+		{
+			string ss;
+			Profile::WriteString("quote", "quote", "\"", iniFile);
+			Profile::GetString("quote", "quote", "", ss, iniFile);
+			EXPECT_EQ(ss , "\"");
+		}
+	}
+}
+
+TEST(ProfileTest, StringArray)
+{
+	string iniFile("inifile.ini");
+	{ 
+		{
+			vector<string> v;
+			v.push_back("aaa");
+			v.push_back("bbb");
+			EXPECT_TRUE(Profile::WriteStringArray("sa", "sak", v, iniFile));
+		}
+
+		{
+			vector<string> v;
+			Profile::GetStringArray("sa", "sak", v, iniFile);
+			EXPECT_EQ(v.size() , 2);
+			EXPECT_EQ(v[0] , "aaa");
+			EXPECT_EQ(v[1] , "bbb");
+		}
+
+	}
+
+	{
+		vector<string> vs;
+		vs.push_back(u8"あああああああ");
+		vs.push_back(u8"いいいいいいいい");
+		vs.push_back(u8"うううううううううう");
+		vs.push_back("faaaaaaae");
+		Profile::WriteStringArray("vs", "vsk", vs, iniFile);
+		vector<string> vsout;
+		Profile::GetStringArray("vs", "vsk", vsout, iniFile);
+		EXPECT_EQ(vs, vsout);
+	}
+}
+
+TEST(ProfileTest, Binary)
+{
+	string iniFile("inifile.ini");
+	srand(static_cast<unsigned int>(time(nullptr)));
+
+	{
+		// binay
+		struct TestS
+		{
+			int a;
+			int b;
+			char c;
+
+			int random[100];
+
+			TestS()
+			{
+				a = 0;
+				b = 0;
+				c = 0;
+			}
+			void set()
+			{
+				a = 111;
+				b = 1234555;
+				c = 33;
+
+				for (size_t i = 0; i < (sizeof(random) / sizeof(random[0])); ++i)
+				{
+					random[i] = rand();
+				}
+			}
+		};
+
+		TestS ts;
+		ts.set();
+		Profile::WriteBinary("ba", "bskey", (unsigned char*)&ts, sizeof(ts), iniFile);
+
+		TestS tsout;
+		Profile::GetBinary("ba", "bskey", (unsigned char*)&tsout, iniFile);
+
+		EXPECT_EQ(memcmp(&ts, &tsout, sizeof(ts)), 0);
+	}
+
+	{
+		vector<unsigned char> v;
+		v.push_back(11);
+		v.push_back(22);
+		v.push_back(33);
+		Profile::WriteBinary("MyBinarySection", "MyBinaryKey", v, iniFile);
+
+		vector<unsigned char> vout;
+		Profile::GetBinary("MyBinarySection", "MyBinaryKey", vout, iniFile);
+
+		EXPECT_EQ(v , vout);
+	}
+}
+
 
 TEST(ProfileTest, Exception)
 {
