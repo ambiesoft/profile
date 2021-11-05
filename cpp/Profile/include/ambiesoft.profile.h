@@ -1191,7 +1191,9 @@ namespace Ambiesoft {
 				hi->Hash()[app] = sec;
 			}
 
-			(*sec)[key] = vs;
+			// (*sec)[key] = vs;
+			(*sec)[key].clear();
+			(*sec)[key].assign(vs.begin(), vs.end());
 			return true;
 		}
 

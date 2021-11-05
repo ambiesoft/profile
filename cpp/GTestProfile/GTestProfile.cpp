@@ -1,6 +1,8 @@
 ﻿// GTestProfile.cpp : Defines the entry point for the console application.
 //
 #include <string>
+#include <deque>
+#include <list>
 #include "../Profile/include/ambiesoft.profile.h"
 
 // run git submodule update -i
@@ -54,11 +56,12 @@ TEST(ProfileTest, Bool)
 		EXPECT_FALSE(b);
 	}
 }
-
+#pragma warning(disable:4566)
 TEST(ProfileTest, String)
 {
 	string iniFile("inifile.ini");
 	{
+
 		EXPECT_TRUE(Profile::WriteString("mysection2", "mykey22", u8"あああ", iniFile));
 
 		string sval;
@@ -115,6 +118,49 @@ TEST(ProfileTest, StringArray)
 		vector<string> vsout;
 		Profile::GetStringArray("vs", "vsk", vsout, iniFile);
 		EXPECT_EQ(vs, vsout);
+	}
+	{
+		vector<string> vs;
+		vs.push_back(u8"あああああああ");
+		vs.push_back(u8"いいいいいいいい");
+		vs.push_back(u8"うううううううううう");
+		vs.push_back("faaaaaaae");
+		Profile::WriteStringArray("vs", "vsk", vs, iniFile);
+		deque<string> vsout;
+		Profile::GetStringArray("vs", "vsk", vsout, iniFile);
+		EXPECT_EQ(vs.size(), vsout.size());
+		for (size_t i = 0; i < vs.size(); ++i)
+			EXPECT_EQ(vs[i], vsout[i]);
+	}
+	{
+		vector<string> vs;
+		vs.push_back(u8"あああああああ");
+		vs.push_back(u8"いいいいいいいい");
+		vs.push_back(u8"うううううううううう");
+		vs.push_back("faaaaaaae");
+		Profile::WriteStringArray("vs", "vsk", vs, iniFile);
+		list<string> vsout;
+		Profile::GetStringArray("vs", "vsk", vsout, iniFile);
+		EXPECT_EQ(vs.size(), vsout.size());
+		vector<string>::iterator itv = vs.begin();
+		list<string>::iterator itl = vsout.begin();
+		for (; itv != vs.end() && itl != vsout.end(); ++itv, ++itl)
+			EXPECT_EQ(*itv, *itl);
+	}
+	{
+		list<string> vs;
+		vs.push_back(u8"あああああああ");
+		vs.push_back(u8"いいいいいいいい");
+		vs.push_back(u8"うううううううううう");
+		vs.push_back("faaaaaaae");
+		Profile::WriteStringArray("vs", "vsk", vs, iniFile);
+		list<string> vsout;
+		Profile::GetStringArray("vs", "vsk", vsout, iniFile);
+		EXPECT_EQ(vs.size(), vsout.size());
+		list<string>::iterator itv = vs.begin();
+		list<string>::iterator itl = vsout.begin();
+		for (; itv != vs.end() && itl != vsout.end(); ++itv, ++itl)
+			EXPECT_EQ(*itv, *itl);
 	}
 }
 
