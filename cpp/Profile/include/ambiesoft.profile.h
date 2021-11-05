@@ -1115,9 +1115,10 @@ namespace Ambiesoft {
 
 
 		// vector<string> starts ------------
+		template<class CONT>
 		static bool GetStringArray(const std::string& app,
 			const std::string& key,
-			std::vector<std::string>& vs,
+			CONT& vs,
 			HashIniHandle hih)
 		{
 			HashIni* hi = reinterpret_cast<HashIni*>(hih);
@@ -1135,26 +1136,27 @@ namespace Ambiesoft {
 			if (sec == nullptr)
 				return false;
 
-			vs = (*sec)[key];
+			vs.assign((*sec)[key].begin(), (*sec)[key].end());
+			//vs = (*sec)[key];
 
 			return true;
 		}
 
-		template<class C>
+		template<class C, class CONT>
 		static bool GetStringArray(const std::string& app,
 			const std::string& key,
-			std::vector<std::string>& vs,
+			CONT& vs,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inipath)
 		{
 			CHashIni hih(ReadAll(inipath));
 			return GetStringArray(app, key, vs, hih);
 		}
 
-		template<class C>
+		template<class C, class CONT>
 		static bool WriteStringArray(
 			const std::string& app,
 			const std::string& key,
-			const std::vector<std::string>& vs,
+			const CONT& vs,
 			const std::basic_string<C, std::char_traits<C>, std::allocator<C>>& inifile)
 		{
 			CHashIni ini(ReadAll(inifile));
@@ -1164,10 +1166,11 @@ namespace Ambiesoft {
 
 			return WriteAll(ini, inifile);
 		}
+		template<class CONT>
 		static bool WriteStringArray(
 			const std::string& app,
 			const std::string& key,
-			const std::vector<std::string>& vs,
+			const CONT& vs,
 			HashIniHandle hih)
 		{
 			HashIni* hi = reinterpret_cast<HashIni*>(hih);
