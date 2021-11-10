@@ -247,3 +247,12 @@ TEST(ProfileTest, Exception)
         FAIL() << "Unexpected Exception";
     }
 }
+
+TEST(ProfileTest, IncludeEqual)
+{
+	string iniFile("inifileEqual.ini");
+	EXPECT_TRUE(Profile::WriteString("SECTION_EQUAL", "KEY_EQUAL", "use-gl=desktop", iniFile));
+	string val;
+	EXPECT_TRUE(Profile::GetString("SECTION_EQUAL", "KEY_EQUAL", "", val, iniFile));
+	EXPECT_STREQ("use-gl=desktop", val.c_str());
+}

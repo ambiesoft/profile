@@ -50,5 +50,6 @@ cpp/GTestProfile/.vs/
 cpp/GTestProfile/Debug/
 cpp/GTestProfile/Release/
 cpp/GTestProfile/inifile.ini
+cpp/GTestProfile/inifileEqual.ini
 cpp/GTestProfile/x64/
 
