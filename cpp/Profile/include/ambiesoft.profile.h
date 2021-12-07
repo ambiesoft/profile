@@ -234,13 +234,22 @@ namespace Ambiesoft {
 		public:
 			explicit CHashIni(HashIniHandle h) : h_(h)
 			{}
+			CHashIni() : h_(nullptr)
+			{}
 			~CHashIni()
 			{
 				Profile::FreeHandle(h_);
 			}
+			void reset(HashIniHandle h) {
+				Profile::FreeHandle(h_);
+				h_ = h;
+			}
 			operator HashIniHandle()
 			{
 				return h_;
+			}
+			operator bool() {
+				return h_ != nullptr;
 			}
 		};
 
