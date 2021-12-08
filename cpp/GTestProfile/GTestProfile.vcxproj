@@ -160,6 +160,7 @@
     <ClCompile Include="GTestProfile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\lsMisc\stdosd\stdosd_exception.h" />
     <ClInclude Include="..\Profile\include\ambiesoft.profile.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

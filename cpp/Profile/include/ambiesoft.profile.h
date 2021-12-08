@@ -55,29 +55,11 @@
 #include <locale>
 #include <codecvt>
 
-// #include <boost/algorithm/string/trim.hpp>
+#include "../../../../lsMisc/stdosd/stdosd_exception.h"
 
 
 namespace Ambiesoft {
-	class error_base : public std::exception
-	{
-		std::string message_;
-	public:
-		explicit error_base(const std::string& message)
-			: message_(message){}
-		explicit error_base(const char *message)
-			: message_(message){}
 
-		virtual ~error_base(){}
-
-        virtual const char* what() const
-#if defined(__MINGW32__) || defined(__GNUC__)
-        _GLIBCXX_USE_NOEXCEPT
-#endif
-		{
-			return message_.c_str();
-		}
-	};
 	class file_not_found_error : public error_base
 	{
 	public:

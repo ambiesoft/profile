@@ -29,5 +29,8 @@
     <ClInclude Include="..\Profile\include\ambiesoft.profile.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\lsMisc\stdosd\stdosd_exception.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
