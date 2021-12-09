@@ -222,6 +222,7 @@ namespace Ambiesoft {
 			{
 				Profile::FreeHandle(h_);
 			}
+			CHashIni& operator=(const CHashIni&) = delete;
 			void reset(HashIniHandle h) {
 				Profile::FreeHandle(h_);
 				h_ = h;
