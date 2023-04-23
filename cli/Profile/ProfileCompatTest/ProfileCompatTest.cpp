@@ -120,7 +120,19 @@ bool checksamestringandint(LPCTSTR sec, LPCTSTR key, LPCTSTR file)
 
 	return true;
 }
+bool checksamestring2(LPCTSTR sec, LPCTSTR key, LPCTSTR value, LPCTSTR file)
+{
+	TCHAR szVal[256];
+	WritePrivateProfileString(sec, key, value, file);
 
+	GetPrivateProfileString(sec, key, L"", szVal, _countof(szVal), file);
+
+	String^ vval;
+	Profile::GetString(gcnew String(sec),
+		gcnew String(key), "", vval, gcnew String(file));
+
+	return vval == gcnew String(szVal);
+}
 void temptest()
 {
 	Profile::ReadAll("C:\\T\\test.ini");
@@ -329,7 +341,10 @@ int main(array<System::String ^> ^args)
 		errorhappen111();
 	if(!checksamestringandint(_T("SEC"), _T("g"), szFile))
 		errorhappen111();
-	if(!checksamestringandint(_T("SEC"), _T("h"), szFile))
+	if (!checksamestringandint(_T("SEC"), _T("h"), szFile))
+		errorhappen111();
+
+	if (!checksamestring2(_T("SEC"), _T("dq"), _T("\"aaa\""), szFile))
 		errorhappen111();
 
 

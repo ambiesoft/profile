@@ -178,5 +178,17 @@ namespace TestProfile
             Assert.IsTrue(Profile.GetDouble("fff", "ttt", 0, out d, inipath));
             Assert.AreEqual(d, 1222.234);
         }
+        
+        [TestMethod]
+        public void TestDoubleQuote()
+        {
+            string inipath = Path.Combine(AssemblyDirectory, "TestProfile.ini");
+            string dq = "\"aaa\"";
+            Assert.IsTrue(Profile.WriteString("dq", "aaa", dq, inipath));
+
+            string outdq;
+            Assert.IsTrue(Profile.GetString("dq", "aaa", "", out outdq, inipath));
+            Assert.AreEqual("aaa", outdq);
+        }
     }
 }
